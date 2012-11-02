@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+	
+	<TableLayout
+	    android:layout_marginTop="25dp"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content">	    
+	    <TableRow
+	        android:layout_marginTop="5dp"
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp">
+	        <Button 
+	            android:id="@+id/EggAndDairyAndDrink"
+	            android:layout_width="150dp"
+	            android:layout_height="wrap_content"
+	            android:text="@string/EggAndDairyAndDrink"
+	            android:onClick="orderItemInfo" />
+	        <Button 
+	            android:id="@+id/ProcessItems"
+	            android:layout_width="150dp"
+	            android:layout_height="wrap_content"
+	            android:text="@string/ProcessItems"
+	            android:onClick="orderItemInfo" />
+	    </TableRow>
+	    
+	    <TableRow
+	        android:layout_marginTop="5dp"
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp">
+	        <Button 
+	            android:id="@+id/FishItems"
+	            android:layout_width="150dp"
+	            android:layout_height="wrap_content"
+	            android:text="@string/FishItems"
+	            android:onClick="orderItemInfo" />
+	        <Button 
+	            android:id="@+id/MeetItems"
+	            android:layout_width="150dp"
+	            android:layout_height="wrap_content"
+	            android:text="@string/MeetItems"
+	            android:onClick="orderItemInfo" />
+	    </TableRow>
+	    
+	    <TableRow
+	        android:layout_marginTop="5dp"
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp">
+	        <Button 
+	            android:id="@+id/VegetableItems"
+	            android:layout_width="150dp"
+	            android:layout_height="wrap_content"
+	            android:text="@string/VegetableItems"
+	            android:onClick="orderItemInfo" />
+	        <Button 
+	            android:id="@+id/FruitItems"
+	            android:layout_width="150dp"
+	            android:layout_height="wrap_content"
+	            android:text="@string/FruitItems"
+	            android:onClick="orderItemInfo" />
+	    </TableRow>
+	</TableLayout>
+	
+	<Button 
+	    android:id="@+id/ElseItems"
+	    android:layout_width="150dp"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="5dp"
+	    android:layout_marginLeft="160dp"
+	    android:layout_marginRight="10dp"
+	    android:text="@string/ElseItems"
+	    android:onClick="orderItemInfo" />
+	
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="190dp"
+	    android:layout_marginLeft="10dp"
+	    android:orientation="horizontal">
+	    <Button 
+	        android:id="@+id/ToTopPage"
+	        android:layout_width="150dp"
+	        android:layout_height="wrap_content"	    
+	    	android:text="@string/ToTopPage"
+	    	android:onClick="returnTopPage" />
+	    <Button 
+	        android:id="@+id/ToOrderConfirm"
+	        android:layout_width="150dp"
+	        android:layout_height="wrap_content"	    
+	    	android:text="@string/ToOrderConfirm"
+	    	android:onClick="toConfirmPage" />
+	</LinearLayout>
+</LinearLayout>
