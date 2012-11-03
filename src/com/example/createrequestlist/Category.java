@@ -10,76 +10,76 @@ public class Category extends Activity{
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
-		//Activity‚ÌOnCreate‚ğÀs
+		//Activityã®OnCreateã‚’å®Ÿè¡Œ
 		super.onCreate(savedInstanceState);
 		
-		//ƒŒƒCƒAƒEƒgİ’èƒtƒ@ƒCƒ‹‚Ìw’è
+		//ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆè¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®æŒ‡å®š
 		this.setContentView(R.layout.category);
 	}
 
-	//ƒJƒeƒSƒŠƒ{ƒ^ƒ“‰Ÿ‰º‚Ìˆ—
+	//ã‚«ãƒ†ã‚´ãƒªã®ãƒœã‚¿ãƒ³æŠ¼ä¸‹ã—ãŸå ´åˆ
 	public void orderItemInfo(View view){
 		
-		//ƒCƒ“ƒeƒ“ƒg¶¬
+		//ã‚¤ãƒ³ãƒ†ãƒ³ãƒˆç”Ÿæˆ
 		Intent nextActivity = new Intent(this, SelectItems.class);
 		
-		//‘JˆÚæ•t‰Áî•ñ•Ï”‰Šú‰»
+		//ã‚«ãƒ†ã‚´ãƒªååˆæœŸåŒ–
 		String categoryName = "";
 		
-		//‰Ÿ‰º•Ê‚Ì•t‰Áî•ñİ’è
+		//æŠ¼ä¸‹åˆ¥ã«ã‚«ãƒ†ã‚´ãƒªåè¨­å®š
 		switch(view.getId()){
 		case R.id.EggAndDairyAndDrink:
-			categoryName = "—‘E“û»•iEˆù—¿";
+			categoryName = "åµãƒ»ä¹³è£½å“ãƒ»é£²æ–™";
 			break;
 		case R.id.ProcessItems:
-			categoryName = "‰ÁH•i";
+			categoryName = "åŠ å·¥å“";
 			break;
 		case R.id.FishItems:
-			categoryName = "‹›‰î";
+			categoryName = "é­šä»‹";
 			break;
 		case R.id.MeetItems:
-			categoryName = "“÷—Ş";
+			categoryName = "è‚‰é¡";
 			break;
 		case R.id.VegetableItems:
-			categoryName = "–ìØ";
+			categoryName = "é‡èœ";
 			break;
 		case R.id.FruitItems:
-			categoryName = "‰Ê•¨";
+			categoryName = "æœç‰©";
 			break;
 		case R.id.ElseItems:
-			categoryName = "‚»‚Ì‘¼";
+			categoryName = "ãã®ä»–";
 			break;
 		}
 		
-		//ƒCƒ“ƒeƒ“ƒg•t‰Áî•ñİ’è
+		//ã‚¤ãƒ³ãƒ†ãƒ³ãƒˆä»˜åŠ æƒ…å ±è¨­å®š
 		nextActivity.putExtra("CategoryName", categoryName);
 		
-		//ƒAƒNƒeƒBƒrƒeƒB‹N“®
+		//ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£èµ·å‹•
 		this.startActivity(nextActivity);
 	}
 	
-	//ƒgƒbƒvƒy[ƒW‚Öƒ{ƒ^ƒ“‰Ÿ‰º‚Ìˆ—
+	//ãƒˆãƒƒãƒ—ãƒšãƒ¼ã‚¸ã¸æŠ¼ä¸‹ã—ãŸå ´åˆ
 	public void returnTopPage(View view){
-		//ƒAƒNƒeƒBƒrƒeƒBI—¹
+		//ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£çµ‚äº†
 		this.finish();
 	}
 	
-	//’•¶Šm”F‚Öƒ{ƒ^ƒ“‰Ÿ‰º‚Ìˆ—
+	//æ³¨æ–‡ç¢ºèªã‚’æŠ¼ä¸‹ã—ãŸå ´åˆ
 	public void toConfirmPage(View view){
 		
-		//ƒCƒ“ƒeƒ“ƒg¶¬
+		//ã‚¤ãƒ³ãƒ†ãƒ³ãƒˆç”Ÿæˆ
 		Intent nextActivity = new Intent(this, OrderedConfirm.class);
 		
-		//Ÿ‚ÌƒAƒNƒeƒBƒrƒeƒB‹N“®
+		//ï¿½ï¿½ï¿½Ìƒã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£èµ·å‹•
 		this.startActivity(nextActivity);
 	}
 	
-	//BackƒL[–³Œø
+	//Backã‚­ãƒ¼ç„¡åŠ¹
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event){
-		//ƒ{ƒ^ƒ“‰Ÿ‰º‚µ‚½ê‡
+		//ãƒ‡ãƒã‚¤ã‚¹ãƒœã‚¿ãƒ³ãŒæŠ¼ä¸‹ã•ã‚ŒãŸå ´åˆ
 		if(event.getAction() == KeyEvent.ACTION_DOWN){
-			//BackƒL[‚ª‰Ÿ‰º‚³‚ê‚½ê‡
+			//Backã‚­ãƒ¼ãŒæŠ¼ä¸‹ã•ã‚ŒãŸå ´åˆ
 			if(event.getKeyCode() == KeyEvent.KEYCODE_BACK){
 				return true;
 			}

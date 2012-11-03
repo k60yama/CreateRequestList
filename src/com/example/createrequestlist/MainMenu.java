@@ -10,25 +10,22 @@ import android.content.Intent;
 
 public class MainMenu extends Activity implements OnClickListener{
 
-	//‘JˆÚæ‚ÌƒAƒNƒeƒBƒrƒeƒBw’è
-	private Intent nextActivity;
-	
-    @Override
+	@Override
     public void onCreate(Bundle savedInstanceState) {
-        //ActivityƒNƒ‰ƒX‚ÌOnCreate
+        //Activityã®OnCreateå®Ÿè¡Œ
     	super.onCreate(savedInstanceState);
         
-    	//ƒŒƒCƒAƒEƒgİ’èƒtƒ@ƒCƒ‹‚Ìw’è
+    	//ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆè¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®æŒ‡å®š
         this.setContentView(R.layout.main);
         
-        //Button ƒIƒuƒWƒFƒNƒg
+        //Button ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå–å¾—
         Button[] buttons = {
         	(Button)this.findViewById(R.id.order),
         	(Button)this.findViewById(R.id.editList),
         	(Button)this.findViewById(R.id.orderHistory)
         };
         
-        //Button ƒIƒuƒWƒFƒNƒg‚ÉƒNƒŠƒbƒNƒŠƒXƒi[İ’è
+        //Button ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ã‚¯ãƒªãƒƒã‚¯ãƒªã‚¹ãƒŠãƒ¼ã‚’è¨­å®š
         for(Button button:buttons){
         	button.setOnClickListener(this);
         }
@@ -37,7 +34,10 @@ public class MainMenu extends Activity implements OnClickListener{
     @Override
     public void onClick(View view){
     	
-    	//‘JˆÚæw’è
+    	//Intentå¤‰æ•°åˆæœŸåŒ–
+    	Intent nextActivity = null;
+    	
+    	//æŠ¼ä¸‹åˆ¥ã«ã‚¤ãƒ³ãƒ†ãƒ³ãƒˆç”Ÿæˆ
     	switch(view.getId()){
     	case R.id.order:
     		nextActivity = new Intent(this,Category.class);
@@ -50,7 +50,7 @@ public class MainMenu extends Activity implements OnClickListener{
     		break;
     	}
     	
-    	//w’è‚µ‚½‰æ–Ê‚É‘JˆÚ
+    	//ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£èµ·å‹•
     	startActivity(nextActivity);
     }
 }

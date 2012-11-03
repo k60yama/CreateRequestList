@@ -25,6 +25,6 @@ public class SelectItems extends Activity {
 			categoryName = category_data.getString("CategoryName");
 		}
 		
-		text.setText("‘I‘ğ‚³‚ê‚½ƒJƒeƒSƒŠ‚Í" + categoryName);
+		text.setText("é¸æŠã•ã‚ŒãŸã‚«ãƒ†ã‚´ãƒªã¯" + categoryName);
 	}
 }
