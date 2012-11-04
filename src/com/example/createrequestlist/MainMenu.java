@@ -29,6 +29,10 @@ public class MainMenu extends Activity implements OnClickListener{
         for(Button button:buttons){
         	button.setOnClickListener(this);
         }
+        
+        
+        
+        
     }
 
     @Override
