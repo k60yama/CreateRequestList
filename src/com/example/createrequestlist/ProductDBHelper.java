@@ -14,10 +14,10 @@ import android.util.Log;
 
 public class ProductDBHelper extends SQLiteOpenHelper {
 	
-	private final String DB_FILE_PATH;							//データベースが保存されているパス
-	private static final String DB_NAME = "product";			//データベース名
-	private static final String DB_NAME_ASSET = "product.db";	//事前に作成したデータベースファイル
-	private final Context context;								//呼び出し元のアクティビティ保持用
+	private final String DB_FILE_PATH;								//データベースが保存されているパス
+	private static final String DB_NAME = "product";				//データベース名
+	private static final String DB_NAME_ASSET = "product.sqlite3";	//事前に作成したデータベースファイル
+	private final Context context;									//呼び出し元のアクティビティ保持用
 	private SQLiteDatabase database;
 	
 	public ProductDBHelper(Context con){
