@@ -2,11 +2,23 @@ package com.example.createrequestlist;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 public class Category extends Activity{
+	
+	//データベース
+	private SQLiteDatabase productDB;
+	
+	//データベースの情報
+	private static final String[] COLUMNS = {
+		"id","product_name","product_category"
+	};
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -20,6 +32,26 @@ public class Category extends Activity{
 	//カテゴリのボタン押下した場合
 	public void orderItemInfo(View view){
 		
+		//Button型にキャスト
+		Button btn = (Button)view;
+		
+		//検索条件取得
+		String categoryWhere = btn.getText().toString();
+		
+		//データベースを開く
+		ProductDBHelper pHelper = new ProductDBHelper(this);
+		productDB = pHelper.openDataBase();
+		
+		//データ取得
+		Cursor cursor = this.getProductData(categoryWhere);
+		
+		//ビュー成形
+		while(cursor.moveToNext()){
+			Toast.makeText(this, cursor.getString(1), Toast.LENGTH_SHORT).show();
+		}
+		
+		
+		/*
 		//インテント生成
 		Intent nextActivity = new Intent(this, SelectItems.class);
 		
@@ -56,6 +88,7 @@ public class Category extends Activity{
 		
 		//アクティビティ起動
 		this.startActivity(nextActivity);
+		*/
 	}
 	
 	//トップページへ押下した場合
@@ -70,8 +103,13 @@ public class Category extends Activity{
 		//インテント生成
 		Intent nextActivity = new Intent(this, OrderedConfirm.class);
 		
-		//���̃アクティビティ起動
+		//アクティビティ起動
 		this.startActivity(nextActivity);
+	}
+	
+	//データ取得
+	private Cursor getProductData(String categoryName){
+		return productDB.query("product_info", COLUMNS, "product_category='" + categoryName + "'", null, null, null, "id");
 	}
 	
 	//Backキー無効

@@ -15,12 +15,14 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class MainMenu extends Activity implements OnClickListener{
 	
+	/*
 	private SQLiteDatabase db;
 	
 	//データベースの列名
 	private static final String[] COLUMNS = {
-		"product_id","product_name","product_category"
+		"id","product_name","product_category"
 	};
+	*/
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,20 +71,23 @@ public class MainMenu extends Activity implements OnClickListener{
     	startActivity(nextActivity);
     }
     
+    /*
     @Override
     public void onDestroy(){
     	//アプリを終了するタイミングでデータベースを閉じる
     	db.close();
     	super.onDestroy();
     }
+    */
     
-    public void setDataBase(){
+    private void setDataBase(){
     	//DatabaseHelperクラスのインスタンス生成
     	ProductDBHelper mDbHelper = new ProductDBHelper(this);
     	
     	//空のデータベースを作成する
     	mDbHelper.createEmptyDataBase();
     	
+    	/*
     	//ここからテスト
     	//既存データベースを開く
 		db = mDbHelper.openDataBase();
@@ -97,7 +102,7 @@ public class MainMenu extends Activity implements OnClickListener{
         }
 		
 		//ここまでテスト
-		
+		*/
     }
     
 }

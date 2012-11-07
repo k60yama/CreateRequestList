@@ -18,7 +18,6 @@ public class ProductDBHelper extends SQLiteOpenHelper {
 	private static final String DB_NAME = "product";				//データベース名
 	private static final String DB_NAME_ASSET = "product.sqlite3";	//事前に作成したデータベースファイル
 	private final Context context;									//呼び出し元のアクティビティ保持用
-	private SQLiteDatabase database;
 	
 	public ProductDBHelper(Context con){
 		//データベースを開く
@@ -54,7 +53,7 @@ public class ProductDBHelper extends SQLiteOpenHelper {
 		SQLiteDatabase check_DB = null;
 		
 		try{
-			//指定したデータベースを開く
+			//指定したデータベースを書き込みモードで開く
 			check_DB = SQLiteDatabase.openDatabase(DB_FILE_PATH, null, SQLiteDatabase.OPEN_READWRITE);
 		}catch(SQLiteException e){
 			//データベースはまだ存在しない
@@ -84,19 +83,16 @@ public class ProductDBHelper extends SQLiteOpenHelper {
 		}
 		
 		//クローズ処理
-		out.flush(); //ここ質問
+		//out.flush(); //BufferedWriteStream等のBuffered・・・を使用した場合に必要
 		out.close();
 		in.close();
 	}
 	
-	
 	public SQLiteDatabase openDataBase(){
 		
-		//データベースを開く
-		database = SQLiteDatabase.openDatabase(this.DB_FILE_PATH, null, SQLiteDatabase.OPEN_READWRITE);
-		return database;
+		//データベースを書き込みモードで開く
+		return SQLiteDatabase.openDatabase(this.DB_FILE_PATH, null, SQLiteDatabase.OPEN_READWRITE);
 	}
-	
 	
 	@Override
 	public void onCreate(SQLiteDatabase db) {
@@ -105,14 +101,4 @@ public class ProductDBHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 	}
-	
-	
-	@Override
-	public synchronized void close(){
-		if(database != null){
-			database.close();
-		}
-		super.close();
-	}
-	
 }
