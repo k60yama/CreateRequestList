@@ -64,15 +64,15 @@
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="330dp">
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent">
-        <TableLayout 
-            android:id="@+id/ItemInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-        </TableLayout>
-   	</ScrollView>
+    	<ScrollView
+        	android:layout_width="wrap_content"
+        	android:layout_height="match_parent">
+        	<TableLayout
+        	    android:id="@+id/itemInfo"
+        	    android:layout_width="match_parent"
+        	    android:layout_height="wrap_content">        	    
+        	</TableLayout>
+   		</ScrollView>
     </HorizontalScrollView>
     <!-- 品物名表示一覧 ここまで-->
     

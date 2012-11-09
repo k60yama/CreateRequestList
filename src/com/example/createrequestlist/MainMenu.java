@@ -1,28 +1,13 @@
 package com.example.createrequestlist;
 
-
-
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 public class MainMenu extends Activity implements OnClickListener{
-	
-	/*
-	private SQLiteDatabase db;
-	
-	//データベースの列名
-	private static final String[] COLUMNS = {
-		"id","product_name","product_category"
-	};
-	*/
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,14 +56,6 @@ public class MainMenu extends Activity implements OnClickListener{
     	startActivity(nextActivity);
     }
     
-    /*
-    @Override
-    public void onDestroy(){
-    	//アプリを終了するタイミングでデータベースを閉じる
-    	db.close();
-    	super.onDestroy();
-    }
-    */
     
     private void setDataBase(){
     	//DatabaseHelperクラスのインスタンス生成
@@ -86,23 +63,5 @@ public class MainMenu extends Activity implements OnClickListener{
     	
     	//空のデータベースを作成する
     	mDbHelper.createEmptyDataBase();
-    	
-    	/*
-    	//ここからテスト
-    	//既存データベースを開く
-		db = mDbHelper.openDataBase();
-		
-		Cursor cursor = db.query("product_info", COLUMNS, null, null, null, null, null);
-    	
-		while(cursor.moveToNext()){
-        	
-        	//Toast.makeText(this, cursor.getInt(0),Toast.LENGTH_SHORT).show();		
-			Toast.makeText(this, cursor.getString(1),Toast.LENGTH_SHORT).show();
-			Toast.makeText(this, cursor.getString(2),Toast.LENGTH_SHORT).show();
-        }
-		
-		//ここまでテスト
-		*/
     }
-    
 }

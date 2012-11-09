@@ -19,13 +19,13 @@ public final class R {
         public static final int ElseItems=0x7f070007;
         public static final int FishItems=0x7f070003;
         public static final int FruitItems=0x7f070006;
-        public static final int ItemInfo=0x7f070008;
         public static final int MeetItems=0x7f070004;
         public static final int ProcessItems=0x7f070002;
         public static final int ToOrderConfirm=0x7f07000a;
         public static final int ToTopPage=0x7f070009;
         public static final int VegetableItems=0x7f070005;
         public static final int editList=0x7f07000c;
+        public static final int itemInfo=0x7f070008;
         public static final int menu_settings=0x7f07000e;
         public static final int order=0x7f07000b;
         public static final int orderHistory=0x7f07000d;
