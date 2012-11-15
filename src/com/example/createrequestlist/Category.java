@@ -1,6 +1,7 @@
 package com.example.createrequestlist;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,18 +9,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class Category extends Activity{
 	
@@ -39,12 +37,9 @@ public class Category extends Activity{
 	//カウント値
 	private Integer count;
 	
-	//ScrollView
-	//private ScrollView sv;
+	private HashMap<String,ArrayList<TableRow>> tmap = new HashMap<String,ArrayList<TableRow>>();
 	
-	//EditText
-	private static ArrayList<EditText> edit = new ArrayList<EditText>();
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		//ActivityのOnCreateを実行
@@ -92,13 +87,11 @@ public class Category extends Activity{
 		ProductDBHelper pHelper = new ProductDBHelper(this);
 		productDB = pHelper.openDataBase();
 		
-		//カウント初期化
-		count = 0;
-		
 		//カテゴリ数分繰り返す
 		for(String categoryName:CATEGORIES){
+			//初期化
+			count = 0;
 			this.createTable(categoryName);					//TableLayout生成
-			//count = count + 1;							//カウントアップ
 		}
 		
 		//データベース閉じる
@@ -110,13 +103,21 @@ public class Category extends Activity{
 		//データ取得
 		Cursor cursor = this.getProductData(categoryName);
 		
+		//カテゴリ別にArrayListを作成
+		final ArrayList<EditText> edit = new ArrayList<EditText>();
+		
 		//TableLayout取得
 		TableLayout tLayout = (TableLayout)this.findViewById(R.id.itemInfo);
+		
+		//表示・非表示制御
+		final ArrayList<TableRow> tRow = new ArrayList<TableRow>();
 		
 		//レコード数チェック
 		//0件の場合:TextView生成
 		//1件以上の場合:TableLayout生成
 		if(cursor.moveToFirst()){
+			
+			
 			
 			//レコード数分作成する
 			do{
@@ -147,7 +148,7 @@ public class Category extends Activity{
 				//ArrayListに確保
 				edit.add(ed);
 				
-				//Button
+				//Button → ImageView に変更
 				Button btn = new Button(this);
 				btn.setWidth(100);
 				btn.setText("テスト");
@@ -159,17 +160,21 @@ public class Category extends Activity{
 						Button b = (Button)v;
 						Integer i = (Integer)b.getTag();
 						EditText num = edit.get(i-1);
-						//Log.d("おしたボタン：", String.valueOf(i-1));
 						Integer count2 = Integer.valueOf(num.getText().toString());
 						count2 = count2 + 1;
 						num.setText(String.valueOf(count2));
-						//Toast.makeText(Category.this, String.valueOf(count2), Toast.LENGTH_SHORT).show();
 					}
 				});
 				row.addView(btn);
 				
 				tLayout.addView(row);
-			}while(cursor.moveToNext());			
+				
+				tRow.add(row);	//生成した行をArrayListに追加
+				
+			}while(cursor.moveToNext());
+			
+			
+			
 		}else{
 			//TableRow生成
 			TableRow row = new TableRow(this);
@@ -179,7 +184,11 @@ public class Category extends Activity{
 			nothing.setText("選択されたカテゴリに品物は登録されていません。");
 			row.addView(nothing);
 			tLayout.addView(row);
+			
+			tRow.add(row);
 		}
+		
+		tmap.put(categoryName,tRow);
 		
 		//検索結果クリア
 		cursor.close();

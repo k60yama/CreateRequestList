@@ -5,6 +5,9 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
 
+    <!-- 共通 -->
+    <string name="ToTopPage">トップページへ</string>
+    
     <!-- トップページ用画面 -->
     <string name="order_label">注文する</string>
     <string name="editList_label">品物リスト編集</string>
@@ -18,7 +21,14 @@
     <string name="VegetableItems">野菜</string>
     <string name="FruitItems">果物</string>
     <string name="ElseItems">その他</string>
-    <string name="ToTopPage">トップページへ</string>
     <string name="ToOrderConfirm">注文確認へ</string>
+    
+    <!-- 品物リスト編集画面 -->
+    <string name="list_title">品物リスト編集</string>
+    <string name="list_warning">※「変更する」・「削除する」場合は【品物リスト】から品物を一つ選択してください。</string>
+    <string name="Itemlist">【品物リスト】</string>
+    <string name="ItemAdd">追加する</string>
+    <string name="ItemUpdate">変更する</string>
+    <string name="ItemDelete">削除する</string>
     
 </resources>
