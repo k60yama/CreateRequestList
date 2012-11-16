@@ -1,7 +1,6 @@
 package com.example.createrequestlist;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -34,11 +33,11 @@ public class Category extends Activity{
 		"卵・乳製品・飲料","加工品","魚介","肉類","野菜","果物","その他"
 	};
 	
-	//カウント値
-	private Integer count;
+	//Buttonオブジェクトに設定するタグ用カウント
+	private Integer tagCount;
 	
-	private HashMap<String,ArrayList<TableRow>> tmap = new HashMap<String,ArrayList<TableRow>>();
-	
+	//カテゴリ別にArrayListを作成
+	private ArrayList<EditText> edit = new ArrayList<EditText>();
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -87,11 +86,13 @@ public class Category extends Activity{
 		ProductDBHelper pHelper = new ProductDBHelper(this);
 		productDB = pHelper.openDataBase();
 		
+		//(EditText)タグ用カウント初期化
+		tagCount = 0;
+		
 		//カテゴリ数分繰り返す
 		for(String categoryName:CATEGORIES){
-			//初期化
-			count = 0;
-			this.createTable(categoryName);					//TableLayout生成
+			//TableLayout生成
+			this.createTable(categoryName);
 		}
 		
 		//データベース閉じる
@@ -103,27 +104,16 @@ public class Category extends Activity{
 		//データ取得
 		Cursor cursor = this.getProductData(categoryName);
 		
-		//カテゴリ別にArrayListを作成
-		final ArrayList<EditText> edit = new ArrayList<EditText>();
-		
 		//TableLayout取得
 		TableLayout tLayout = (TableLayout)this.findViewById(R.id.itemInfo);
-		
-		//表示・非表示制御
-		final ArrayList<TableRow> tRow = new ArrayList<TableRow>();
 		
 		//レコード数チェック
 		//0件の場合:TextView生成
 		//1件以上の場合:TableLayout生成
 		if(cursor.moveToFirst()){
 			
-			
-			
 			//レコード数分作成する
 			do{
-				//カウントアップ
-				count = count + 1;
-				
 				//TableRow生成
 				TableRow row = new TableRow(this);
 				
@@ -138,6 +128,9 @@ public class Category extends Activity{
 				tv.setText(cursor.getString(1));
 				row.addView(tv);
 				
+				//マイナスするButtonオブジェクトを追加
+				row.addView(this.createMinusButton());
+				
 				//EditText
 				EditText ed = new EditText(this);
 				ed.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -145,36 +138,19 @@ public class Category extends Activity{
 				ed.setWidth(80);
 				row.addView(ed);
 				
-				//ArrayListに確保
+				//EditTextをArrayListに格納
 				edit.add(ed);
 				
-				//Button → ImageView に変更
-				Button btn = new Button(this);
-				btn.setWidth(100);
-				btn.setText("テスト");
-				btn.setTag(count);
-				btn.setOnClickListener(new OnClickListener(){
-					@Override
-					public void onClick(View v) {
-						// TODO 自動生成されたメソッド・スタブ
-						Button b = (Button)v;
-						Integer i = (Integer)b.getTag();
-						EditText num = edit.get(i-1);
-						Integer count2 = Integer.valueOf(num.getText().toString());
-						count2 = count2 + 1;
-						num.setText(String.valueOf(count2));
-					}
-				});
-				row.addView(btn);
+				//プラスするButtonオブジェクトを追加
+				row.addView(this.createPlusButton());
 				
+				//生成したTableRowをTableLayoutに追加
 				tLayout.addView(row);
 				
-				tRow.add(row);	//生成した行をArrayListに追加
+				//Buttonオブジェクトに設定するタグ用カウントアップ
+				tagCount = tagCount + 1;
 				
 			}while(cursor.moveToNext());
-			
-			
-			
 		}else{
 			//TableRow生成
 			TableRow row = new TableRow(this);
@@ -184,11 +160,7 @@ public class Category extends Activity{
 			nothing.setText("選択されたカテゴリに品物は登録されていません。");
 			row.addView(nothing);
 			tLayout.addView(row);
-			
-			tRow.add(row);
 		}
-		
-		tmap.put(categoryName,tRow);
 		
 		//検索結果クリア
 		cursor.close();
@@ -197,6 +169,76 @@ public class Category extends Activity{
 	//データ取得
 	private Cursor getProductData(String categoryName){
 		return productDB.query("product_info", COLUMNS, "product_category='" + categoryName + "'", null, null, null, "id");
+	}
+	
+	//マイナス用Buttonオブジェクト生成
+	private Button createMinusButton(){
+		//Button生成
+		Button mBtn = new Button(this);
+		mBtn.setWidth(100);
+		mBtn.setText("マイナス");
+		mBtn.setTag(tagCount);
+		mBtn.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				//Buttonクラスにキャスト
+				Button b = (Button)v;
+						
+				//Buttonオブジェクトに設定したタグを取得(Integer変換)
+				Integer i = (Integer)b.getTag();
+						
+				//ArrayListに格納したEditTextをタグ用カウントを利用して取得する
+				EditText editNum = edit.get(i);
+						
+				//現在表示している数量からプラス１する
+				//EditText設定している数字を取得する
+				Integer num = Integer.valueOf(editNum.getText().toString());
+						
+				//プラス１する(現在設定してある数量が０以上の場合、マイナス)
+				if(num > 0){
+					num = num - 1;
+				}
+				
+				//プラスした値をEditTextに再設定する
+				editNum.setText(String.valueOf(num));
+			}
+		});
+				
+		return mBtn;
+	}
+	
+	//プラス用Buttonオブジェクト生成
+	private Button createPlusButton(){
+		//Button生成
+		Button pBtn = new Button(this);
+		pBtn.setWidth(100);
+		pBtn.setText("プラス");
+		pBtn.setTag(tagCount);
+		pBtn.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				//Buttonクラスにキャスト
+				Button b = (Button)v;
+				
+				//Buttonオブジェクトに設定したタグを取得(Integer変換)
+				Integer i = (Integer)b.getTag();
+				
+				//ArrayListに格納したEditTextをタグ用カウントを利用して取得する
+				EditText editNum = edit.get(i);
+				
+				//現在表示している数量からプラス１する
+				//EditText設定している数字を取得する
+				Integer num = Integer.valueOf(editNum.getText().toString());
+				
+				//プラス１する
+				num = num + 1;
+				
+				//プラスした値をEditTextに再設定する
+				editNum.setText(String.valueOf(num));
+			}
+		});
+		
+		return pBtn;
 	}
 	
 	//Backキー無効

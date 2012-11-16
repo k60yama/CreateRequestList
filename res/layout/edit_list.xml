@@ -19,7 +19,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ToTopPage"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:onClick="returnTopPage" />
     </LinearLayout>
     
     <!-- 注意文言 -->
@@ -44,11 +45,12 @@
     	<ScrollView
         	android:layout_width="wrap_content"
         	android:layout_height="match_parent">
-        	<TableLayout
+        	<LinearLayout
         	    android:id="@+id/itemInfo"
         	    android:layout_width="match_parent"
-        	    android:layout_height="wrap_content">        	    
-        	</TableLayout>
+        	    android:layout_height="wrap_content"
+        	    android:orientation="vertical">        	    
+        	</LinearLayout>
    		</ScrollView>
     </HorizontalScrollView>
     
