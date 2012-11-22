@@ -65,21 +65,18 @@
 	        android:layout_weight="1"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	    	android:text="@string/ItemAdd"
-	    	android:onClick="itemAdd" />
+	    	android:text="@string/ItemAdd" />
 	    <Button 
 	        android:id="@+id/ItemUpdate"
 	        android:layout_weight="1"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"	    
-	    	android:text="@string/ItemUpdate"
-	    	android:onClick="itemUpdate" />
+	    	android:text="@string/ItemUpdate" />
 	    <Button 
 	        android:id="@+id/ItemDelete"
 	        android:layout_weight="1"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"	    
-	    	android:text="@string/ItemDelete"
-	    	android:onClick="itemDelete" />
+	    	android:text="@string/ItemDelete" />
 	</LinearLayout>
 </LinearLayout>
