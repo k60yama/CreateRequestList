@@ -29,7 +29,7 @@ public class Category extends Activity{
 	};
 	
 	//カテゴリの種類
-	private static final String[] CATEGORIES ={
+	public static final String[] CATEGORIES ={
 		"卵・乳製品・飲料","加工品","魚介","肉類","野菜","果物","その他"
 	};
 	
