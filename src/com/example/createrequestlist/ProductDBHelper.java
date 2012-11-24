@@ -18,7 +18,7 @@ public class ProductDBHelper extends SQLiteOpenHelper {
 	private static final String DB_NAME = "product";				//データベース名
 	private static final String DB_NAME_ASSET = "product.sqlite3";	//事前に作成したデータベースファイル
 	private final Context context;									//呼び出し元のアクティビティ保持用
-	
+
 	public ProductDBHelper(Context con){
 		//データベースを開く
 		super(con, DB_NAME,null,1);

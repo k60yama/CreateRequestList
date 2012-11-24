@@ -1,5 +1,7 @@
 package com.example.createrequestlist;
 
+import java.util.HashMap;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
@@ -9,70 +11,54 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class EditList extends Activity implements OnClickListener{
+public class EditList extends Activity{
 
-	//ヘルパークラス
+	//データベース関連
 	private ProductDBHelper pHelper;
-	
-	//データベース
 	private SQLiteDatabase productDB;
-	
-	//データベースの情報
 	private static final String[] COLUMNS = {
 		"id","product_name","product_category"
 	};
 	
 	//処理モード
-	private static String modeType;
+	private String modeFlag;
+	private String modeType;
 	
 	//ラジオボタン表示領域
 	private LinearLayout lLayout;
 	
-	//品物情報(追加用)
+	//品物情報
 	private String item_name;
 	private String category_name;
-	
-	//品物情報(変更・削除用)
-	private String itemTxt;
-	private String id;
+	private HashMap<Integer,String[]> itemMap = new HashMap<Integer,String[]>();
+	private Integer id;
 	
 	//選択ダイアログ位置情報
-	private int categoryWhich = 0;
-	private int modeWhich = 0;
-
-	//＊＊＊＊＊＊＊＊＊＊＊＊＊＊初期処理メソッド　ここから＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+	private static int categoryWhich;
+	private static int modeWhich; 
+	
+//＊＊＊＊＊＊＊＊＊＊＊＊＊＊初期処理メソッド　ここから＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
 	@Override
 	public void onCreate(Bundle savedInstanceState){
-		//ActivityクラスのonCreateを実行
 		super.onCreate(savedInstanceState);
-		
-		//レイアウト設定ファイルの指定
 		this.setContentView(R.layout.edit_list);
 		
 		//データ取得
 		this.getData();
-		
-		//Buttonオブジェクト取得
-		Button[] btns = {
-			(Button)this.findViewById(R.id.ItemAdd),
-			(Button)this.findViewById(R.id.ItemUpdate),
-			(Button)this.findViewById(R.id.ItemDelete),
-		};
-		
-		//ButtonオブジェクトにOnClickListenerを設定
-		for(Button btn:btns){
-			btn.setOnClickListener(this);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if(productDB != null){
+			productDB.close();		//データベースを閉じる
 		}
 	}
 	
@@ -82,63 +68,130 @@ public class EditList extends Activity implements OnClickListener{
 		productDB = pHelper.openDataBase();
 		
 		//ラジオボタン生成
-		this.createRadio();
-		
-		//データベースを閉じる
-		productDB.close();
+		createRadio();
+		productDB.close();		//データベースを閉じる
 	}
 	
 	private void createRadio(){
 		//データ取得
 		Cursor cursor = productDB.query("product_info", COLUMNS, null, null, null, null, "product_category");
 		
-		//LinearLayout取得
+		//LinearLayoutオブジェクト取得
 		if(lLayout == null){
 			lLayout = (LinearLayout)this.findViewById(R.id.itemInfo);
 		}
+		lLayout.removeAllViews();		//LinearLayout初期化
 		
-		//レコード数チェック
-		//0件の場合:TextView生成
-		//1件以上の場合:RadioGroup生成
 		if(cursor.moveToFirst()){
-			//RadioGroup生成
+			//RadioGroup生成(レコードが1件以上の場合)
 			RadioGroup rGroup = new RadioGroup(this);
 			rGroup.setId(0);
 
-			//登録内容分繰り返す
-			do{
-				//キーワード設定(　品物名　（種別名）)
-				String itemName = "　品物名：　" + cursor.getString(1) + "\n　種別：　　" + cursor.getString(2);
+			do{	
+				//品物情報を保持
+				this.keepItemInfo(cursor);
 				
 				//RadioButton生成
 				RadioButton rButton = new RadioButton(this);
 				rButton.setId(cursor.getInt(0));
+				String itemName = "　品物名：　" + cursor.getString(1) + "\n　種別：　　" + cursor.getString(2);
 				rButton.setText(itemName);
-				
-				//RadioGroupにRadioButtonを追加
-				rGroup.addView(rButton);
+				rGroup.addView(rButton);	//RadioGroupにRadioButtonを追加
 			}while(cursor.moveToNext());			
-		
-			//LinearLayoutにRadioGroupを追加
-			lLayout.addView(rGroup);
-			
+			lLayout.addView(rGroup);		//LinearLayoutにRadioGroupを追加
 		}else{
-			//TextView生成
+			//TextView生成(レコードが0件のとき)
 			TextView nothing = new TextView(this);
 			nothing.setText("品物は現在登録されていません。");
-			
-			//LinearLayoutにTextViewを追加
-			lLayout.addView(nothing);
+			lLayout.addView(nothing);		//LinearLayoutにTextViewを追加
 		}
-				
 		//検索結果クリア
 		cursor.close();
 	}
-	//＊＊＊＊＊＊＊＊＊＊＊＊＊＊初期処理メソッド　ここまで＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+//＊＊＊＊＊＊＊＊＊＊＊＊＊＊初期処理メソッド　ここまで＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
 
+//＊＊＊＊＊＊＊＊＊＊＊＊＊＊追加処理メソッド ここから＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+	//追加処理メイン
+	public void itemAddMain(View view){
+		//フラグ初期化
+		modeFlag = "0";
+		modeType = "追加";
+		
+		//品物入力ダイアログ表示へ
+		this.inputItemName();
+	}
+//＊＊＊＊＊＊＊＊＊＊＊＊＊＊追加処理メソッド　ここまで＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
 	
+//＊＊＊＊＊＊＊＊＊＊＊＊＊＊変更処理メソッド　ここから＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+	//変更モード選択ダイアログ生成
+	private void editModeDialog(){
+		//初期化
+		modeWhich = 0;
+		String[] EDIT_MODES = {"品物名と種別を変更", "品物名のみ変更", "種別のみ変更"};
+		
+		//ダイアログ生成
+		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+		dialog.setTitle("変更モード選択ダイアログ");
+		dialog.setSingleChoiceItems(EDIT_MODES, 0, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int whichButton) {
+				modeWhich = whichButton;						//選択位置保持
+			}
+		});
+		dialog.setPositiveButton("次へ", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int whichButton) {
+				selectEditMode(String.valueOf(modeWhich));		//詳細フラグ設定
+			}
+		});
+		dialog.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int whichButton) {
+				showMsg("キャンセルが押されました。\n" + modeType + "処理を終了します。");
+			}
+		});
+		dialog.show();											//ダイアログ表示
+	}
 	
+	//モード別変更処理へ
+	private void selectEditMode(String editFlag){
+		modeFlag = modeFlag + editFlag;
+		if(("10".equals(modeFlag)) || ("11".equals(modeFlag))){
+			inputItemName();	//品物名入力へ
+		}else if("12".equals(modeFlag)){
+			selectCategory();	//種別選択へ
+		}
+	}	
+//＊＊＊＊＊＊＊＊＊＊＊＊＊＊変更処理メソッド　ここまで＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
 	
+//＊＊＊＊＊＊＊＊＊＊＊＊＊＊共通処理メソッド　ここから＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+	//変更削除処理メイン
+	public void itemUpDelMain(View view){
+		//フラグ初期化
+		switch(view.getId()){
+		case R.id.ItemUpdate:
+			modeFlag = "1";
+			modeType = "変更";
+			break;
+		case R.id.ItemDelete:
+			modeFlag = "2";
+			modeType = "削除";
+			break;
+		}
+
+		//ラジオボタン取得
+		RadioButton rButton = this.checkRadioButton();
+		if(rButton == null){
+			showMsg("【品物リスト】から品物をひとつ選択してください。");
+		}else{
+			//選択したアイテム情報を取得
+			id = rButton.getId();		//SQL文検索用
+			String[] itemInfo = itemMap.get(id);
+			item_name = itemInfo[0];
+			category_name = itemInfo[1];
+			confirmDialog();			//確認ダイアログへ
+		}
+	}	
 	
 	//品物名入力ダイアログ表示
 	public void inputItemName(){
@@ -158,376 +211,189 @@ public class EditList extends Activity implements OnClickListener{
 		dialog.setPositiveButton("次へ", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
+				//品物名入力チェック
 				item_name = itemName.getText().toString();
-				
-				//カテゴリ選択ダイアログ画面へ
-				selectCategory();
-			}
-		});
-		dialog.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				//追加処理キャンセル表示
-				showCancel();
-			}
-		});
-		//ダイアログ表示
-		dialog.show();
-	}
-		
-	
-	
-	//確認ダイアログ
-	private void confirmDialog(){
-		//ダイアログ用メッセージ設定
-		String confirmTxt;
-		
-		if("追加".equals(modeType) || "変更".equals(modeType)){
-			confirmTxt = "以下を" + modeType + "しますか？" + 
-					"\n　品物名：　" + item_name +
-					"\n　種別：　　" + category_name;
-		}else{
-			confirmTxt = "以下を" + modeType + "しますか？\n" + 
-					itemTxt;
-		}
-		
-		//ダイアログ生成
-		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-		dialog.setTitle("確認ダイアログ");
-		dialog.setMessage(confirmTxt);
-		dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				//各処理メソッドへ
-				if("追加".equals(modeType)){
-					addData();			//追加処理
-				}else if("変更".equals(modeType)){
-					//変更処理
-					Toast.makeText(EditList.this, "変更するって", Toast.LENGTH_LONG).show();
-				}else if("削除".equals(modeType)){
-					deleteData();		//削除処理
+				if(checkItemName()){
+					if("11".equals(modeFlag)){
+						confirmDialog();	//確認ダイアログ表示
+					}else{
+						selectCategory();	//カテゴリ選択ダイアログ画面へ
+					}
 				}
 			}
 		});
 		dialog.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				//処理キャンセル
-				showCancel();
+				showMsg("キャンセルが押されました。\n" + modeType + "処理を終了します。");
 			}
 		});
 		//ダイアログ表示
 		dialog.show();
 	}
-	
-	
-	//＊＊＊＊＊＊＊＊＊＊＊＊＊＊追加処理メソッド ここから＊＊＊＊＊＊＊＊＊＊＊＊＊＊
-	//データベース追加処理
-	private void addData(){
-		//データベースを開く
-		if(productDB != null){
-			productDB.close();
-		}
 		
-		productDB = pHelper.openDataBase();
-		
-		try{
-			//トランザクション制御開始
-			productDB.beginTransaction();
-			
-			//登録データ設定
-			ContentValues val = new ContentValues();
-			val.put("product_name", item_name);
-			val.put("product_category", category_name);
-			
-			//データ登録
-			productDB.insert("product_info", null, val);
-			
-			//コミット
-			productDB.setTransactionSuccessful();
-			
-			//トランザクション制御終了
-			productDB.endTransaction();
-			
-		}catch(Exception e){
-			Log.e("InsertError",e.toString());
-		}finally{
-			//データベースを閉じる
-			productDB.close();
-		}
-		
-		Toast.makeText(this, "データを追加しました。", Toast.LENGTH_LONG).show();
-		
-		//LinearLayoutを初期化
-		lLayout.removeAllViews();
-		
-		//ラジオボタン更新
-		this.getData();
-	}
-	//＊＊＊＊＊＊＊＊＊＊＊＊＊＊追加処理メソッド　ここまで＊＊＊＊＊＊＊＊＊＊＊＊＊＊
-	
-	//＊＊＊＊＊＊＊＊＊＊＊＊＊＊変更処理メソッド　ここから＊＊＊＊＊＊＊＊＊＊＊＊＊＊
-	//変更モード選択ダイアログ生成
-	private void selectEditMode(){
-		//変更箇所
-		String[] EDIT_MODES = {
-			"品物名と種別を変更する",
-			"品物名のみ変更する",
-			"種別のみ変更する"
-		};
+	//カテゴリ選択画面表示
+	private void selectCategory(){
+		//初期化
+		category_name = "";
+		categoryWhich = 0;
 		
 		//ダイアログ生成
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-		dialog.setTitle("変更箇所選択ダイアログ");
-		dialog.setSingleChoiceItems(EDIT_MODES, 0, new DialogInterface.OnClickListener() {
+		dialog.setTitle("種別選択ダイアログ");
+		dialog.setSingleChoiceItems(Category.CATEGORIES, 0, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton) {
-				modeWhich = whichButton;							//選択位置保持
+				categoryWhich = whichButton;							//選択位置保持
 			}
 		});
 		dialog.setPositiveButton("次へ", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton) {
-				//モード選択
-				//Toast.makeText(EditList.this, String.valueOf(modeWhich), Toast.LENGTH_SHORT).show();
-				switch(modeWhich){
-				case 0:
-					inputItemName();
-					break;
-				case 1:
-					break;
-				case 2:
-					break;
-				}
+				category_name = Category.CATEGORIES[categoryWhich];		//種別情報取得
+				confirmDialog();										//確認ダイアログ表示
 			}
 		});
 		dialog.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton) {
-				showCancel();									//追加処理キャンセル表示
+				showMsg("キャンセルが押されました。\n" + modeType + "処理を終了します。");
 			}
 		});
-		dialog.show();											//ダイアログ表示
+		dialog.show();													//ダイアログ表示
 	}
 	
-	//＊＊＊＊＊＊＊＊＊＊＊＊＊＊変更処理メソッド　ここまで＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+	//確認ダイアログ
+	private void confirmDialog(){
+		//ダイアログ生成
+		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+		dialog.setTitle("確認ダイアログ");
+		dialog.setMessage(confirmTxt());
+		dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if("1".equals(modeFlag)){
+					editModeDialog();	//変更モード選択へ
+				}else{
+					dbMainHandling();	//データ操作へ
+				}
+			}
+		});
+		dialog.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				showMsg("キャンセルが押されました。\n" + modeType + "処理を終了します。");
+			}
+		});
+		dialog.show();				//ダイアログ表示
+	}	
 	
-	//＊＊＊＊＊＊＊＊＊＊＊＊＊＊削除処理メソッド　ここから＊＊＊＊＊＊＊＊＊＊＊＊＊＊
-	private void deleteData(){
-		//データベースを閉じる
+	//チェックされているラジオボタン取得
+	public RadioButton checkRadioButton(){
+		//生成したRadioGroupを取得
+		RadioGroup rGroup = (RadioGroup)this.findViewById(0);
+									
+		//チェックされているRadioButtonを戻り値として返す
+		RadioButton rButton = (RadioButton)this.findViewById(rGroup.getCheckedRadioButtonId());
+		return rButton;
+	}
+	
+	//品物情報保持
+	private void keepItemInfo(Cursor cursor){
+		String[] itemArray = { cursor.getString(1), cursor.getString(2)};
+		itemMap.put(cursor.getInt(0), itemArray);
+	}
+	
+	//品物名入力チェック
+	private boolean checkItemName(){
+		if("".equals(item_name.trim())){
+			showMsg("品物名が未入力です。\n" + modeType + "処理を終了します。");
+			return false;
+		}else{
+			return true;
+		}
+	}
+	
+	//ダイアログ表示
+	private void showMsg(String msg){
+		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+		dialog.setIcon(android.R.drawable.ic_menu_info_details);
+		dialog.setTitle("メッセージ");
+		dialog.setMessage(msg);
+		dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				
+			}
+		});
+		dialog.show();
+	}
+	
+	//確認ダイアログ用文言生成
+	private String confirmTxt(){
+		//定型文言
+		String formatTxt;
+		if(("10".equals(modeFlag)) || ("11".equals(modeFlag)) || ("12".equals(modeFlag))){
+			formatTxt = "以下の内容で";
+		}else{
+			formatTxt = "以下の内容を";
+		}
+		
+		return formatTxt + modeType + "しますか？" + 
+				"\n品物名：　" + item_name +
+				"\n種別：　　" + category_name;
+	}
+	
+	//DBメイン処理
+	private void dbMainHandling(){
+		//データベース存在チェック
 		if(productDB != null){
 			productDB.close();
 		}
-		
 		//データベースを開く
 		productDB = pHelper.openDataBase();
-				
-		try{
-			//トランザクション制御開始
-			productDB.beginTransaction();
-			
-			//削除条件設定
-			String condition = "id = '" + id + "'";
-					
-			//データ削除
-			productDB.delete("product_info", condition, null);
-			
-			//コミット
-			productDB.setTransactionSuccessful();
-					
-			//トランザクション制御終了
-			productDB.endTransaction();
-					
-		}catch(Exception e){
-			Log.e("DeleteError",e.toString());
-		}finally{
-			//データベースを閉じる
-			productDB.close();
-		}
-				
-		Toast.makeText(this, "データを削除しました。", Toast.LENGTH_LONG).show();
-				
-		//LinearLayoutを初期化
-		lLayout.removeAllViews();
-				
-		//ラジオボタン更新
-		this.getData();
-	}		
-	
-	//＊＊＊＊＊＊＊＊＊＊＊＊＊＊削除処理メソッド　ここまで＊＊＊＊＊＊＊＊＊＊＊＊＊＊
-	
-	//＊＊＊＊＊＊＊＊＊＊＊＊＊＊共通処理メソッド　ここから＊＊＊＊＊＊＊＊＊＊＊＊＊＊
-	//追加・変更・削除押下時
-	@Override
-	public void onClick(View view) {
-		//初期化
-		modeType = "";					
-		int modeId = view.getId();			//オブジェクトID取得
 		
-		if(modeId == R.id.ItemAdd){
-			modeType = "追加";
-			this.inputItemName();			//品物入力ダイアログ表示へ
-		}else{
-			//必須チェック
-			RadioButton rButton = this.checkRadioButton();
-			if(rButton == null){
-				this.showCheck();
-				return ;
-			}else{
-				id = String.valueOf(rButton.getId());			//チェックしたIDを選択 
-			}
-			
-			//処理モード設定
-			if(modeId == R.id.ItemUpdate){
-				modeType = "変更";
-				this.selectEditMode();							//変更モード選択
-			}else if(modeId == R.id.ItemDelete){
-				modeType = "削除";
-				itemTxt = rButton.getText().toString();			//品物情報を取得
-				this.confirmDialog();							//確認ダイアログ
-			}
-		}	
-	}
-	
-	//カテゴリ選択画面表示
-	private void selectCategory(){
-		//初期化
-		category_name = "";
-			
-		//品物未入力チェック
-		if("".equals(item_name.trim())){
-			Toast cancel = Toast.makeText(this, "品物名が未入力です。" + "\n追加処理を終了します。" , Toast.LENGTH_LONG);
-			cancel.setGravity(Gravity.CENTER, 0, 0);
-			cancel.show();
-		}else{
-			//ダイアログ生成
-			AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-			dialog.setTitle("種別選択ダイアログ");
-			dialog.setSingleChoiceItems(Category.CATEGORIES, 0, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int whichButton) {
-					categoryWhich = whichButton;							//選択位置保持
-				}
-			});
-			dialog.setPositiveButton("次へ", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int whichButton) {
-					category_name = Category.CATEGORIES[categoryWhich];		//種別情報取得
-					confirmDialog();								//確認ダイアログ表示
-				}
-			});
-			dialog.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int whichButton) {
-					showCancel();									//追加処理キャンセル表示
-				}
-			});
-			dialog.show();											//ダイアログ表示
+		try{
+			productDB.beginTransaction();			//トランザクション制御開始
+			modeHandling();							//モード別処理へ
+			productDB.setTransactionSuccessful();	//コミット
+			productDB.endTransaction();				//トランザクション制御終了
+		}catch(Exception e){
+			Log.e(modeType + "処理",e.toString());
+		}finally{
+			productDB.close();						//データベースを閉じる
 		}
+		//後処理
+		showMsg("データを" + modeType + "しました。");
+		lLayout.removeAllViews();
+		this.getData();
 	}
 	
-	
-	//選択チェック
-	private void showCheck(){
-		Toast checkErr = Toast.makeText(this, "【品物リスト】から品物をひとつ選択してください。", Toast.LENGTH_SHORT);
-		checkErr.setGravity(Gravity.CENTER, 0, 0);
-		checkErr.show();
-	}
-	
-	//処理キャンセル表示
-	private void showCancel(){
-		Toast cancel = Toast.makeText(EditList.this, "キャンセルが押されました\n" + modeType + "処理を終了します。" ,  Toast.LENGTH_LONG);
-		cancel.setGravity(Gravity.CENTER, 0, 0);
-		cancel.show();
+	//モード別処理
+	private void modeHandling(){
+		if("2".equals(modeFlag)){
+			//削除処理
+			String condition = "id = '" + id + "'";
+			productDB.delete("product_info", condition, null);
+		}else{
+			//データ設定
+			ContentValues val = new ContentValues();
+			val.put("product_name", item_name);
+			val.put("product_category", category_name);
+			if("0".equals(modeFlag)){
+				//登録処理
+				productDB.insert("product_info", null, val);
+			}else if(("10".equals(modeFlag)) || ("11".equals(modeFlag)) || ("12".equals(modeFlag))){
+				//変更処理
+				String condition = "id = '" + id + "'";
+				productDB.update("product_info", val, condition, null);
+			}
+		}
 	}
 	
 	//トップページへ押下した場合
 	public void returnTopPage(View view){
-		//アクティビティ終了
-		this.finish();
+		this.finish();		//アクティビティ終了
 	}
-	//＊＊＊＊＊＊＊＊＊＊＊＊＊＊共通処理メソッド　ここまで＊＊＊＊＊＊＊＊＊＊＊＊＊＊
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//変更・削除共通ロジック
-	public RadioButton checkRadioButton(){
-		//生成したRadioGroupを取得
-		RadioGroup rGroup = (RadioGroup)this.findViewById(0);
-								
-		//チェックされているRadioButtonを戻り値として返す
-		RadioButton rButton = (RadioButton)this.findViewById(rGroup.getCheckedRadioButtonId());
-		return rButton;
-		//Toast.makeText(this, Integer.toString(rButton.getId()), Toast.LENGTH_SHORT).show();
-	}
-	
-	
-	/*
-	//要改善
-	//変更する押下した場合
-	public void itemUpdate(View view){
-		//生成したRadioGroupを取得
-		RadioGroup rGroup = (RadioGroup)this.findViewById(0);
-				
-		//チェックされているRadioButtonを取得する
-		RadioButton rButton = (RadioButton)this.findViewById(rGroup.getCheckedRadioButtonId());
-				
-		//チェック有無確認
-		if(rButton == null){
-			Toast.makeText(this, "【品物リスト】から変更する品物をひとつ選択してください。", Toast.LENGTH_SHORT).show();
-		}else{
-			//String confirm = rButton.getText().toString() + "\n　の内容を変更しますか？";
-			//Toast.makeText(this, confirm, Toast.LENGTH_SHORT).show();
-			Toast.makeText(this, Integer.toString(rButton.getId()), Toast.LENGTH_SHORT).show();
-		}
-	}
-	
-	//要改善
-	//削除する押下した場合
-	public void itemDelete(View view){
-		//生成したRadioGroupを取得
-		RadioGroup rGroup = (RadioGroup)this.findViewById(0);
-						
-		//チェックされているRadioButtonを取得する
-		RadioButton rButton = (RadioButton)this.findViewById(rGroup.getCheckedRadioButtonId());
-						
-		//チェック有無確認
-		if(rButton == null){
-			Toast.makeText(this, "【品物リスト】から削除する品物をひとつ選択してください。", Toast.LENGTH_SHORT).show();
-		}else{
-			//String confirm = rButton.getText().toString() + "\n　を削除しますか？";
-			//Toast.makeText(this, confirm, Toast.LENGTH_SHORT).show();
-			Toast.makeText(this, Integer.toString(rButton.getId()), Toast.LENGTH_SHORT).show();
-		}
-	}
-	*/
-	
+//＊＊＊＊＊＊＊＊＊＊＊＊＊＊共通処理メソッド　ここまで＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
 }

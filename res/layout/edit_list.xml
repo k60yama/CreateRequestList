@@ -12,7 +12,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/list_title"
-            android:textSize="20dp"
+            android:textSize="25dp"
             android:layout_weight="9" />
         <Button
             android:id="@+id/button1"
@@ -22,17 +22,10 @@
             android:layout_weight="1"
             android:onClick="returnTopPage" />
     </LinearLayout>
-    
-    <!-- 注意文言 -->
-    <TextView
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/list_warning"
-        android:textColor="#ff0000" />
-    
+        
     <!-- 品物リスト -->
     <TextView
+        android:textSize="20dp"
         android:layout_marginTop="20dp"
         android:textStyle="bold"
         android:layout_width="match_parent"
@@ -41,7 +34,7 @@
     
     <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="300dp">
+        android:layout_height="340dp">
     	<ScrollView
         	android:layout_width="wrap_content"
         	android:layout_height="match_parent">
@@ -65,18 +58,21 @@
 	        android:layout_weight="1"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
+	        android:onClick="itemAddMain"
 	    	android:text="@string/ItemAdd" />
 	    <Button 
 	        android:id="@+id/ItemUpdate"
 	        android:layout_weight="1"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"	    
+	    	android:onClick="itemUpDelMain"
 	    	android:text="@string/ItemUpdate" />
 	    <Button 
 	        android:id="@+id/ItemDelete"
 	        android:layout_weight="1"
 	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"	    
+	        android:layout_height="wrap_content"
+	        android:onClick="itemUpDelMain"	    
 	    	android:text="@string/ItemDelete" />
 	</LinearLayout>
 </LinearLayout>
