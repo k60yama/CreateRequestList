@@ -31,4 +31,8 @@
     <string name="ItemUpdate">変更する</string>
     <string name="ItemDelete">削除する</string>
     
+    <!-- お願い確認画面 -->
+    <string name="checkTxt">この内容でお願いしますか？</string>
+    <string name="no">いいえ</string>
+    <string name="yes">はい</string>
 </resources>

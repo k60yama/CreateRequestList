@@ -1,8 +1,11 @@
 package com.example.createrequestlist;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,7 +15,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -88,13 +90,56 @@ public class Category extends Activity{
 	
 	//注文確認を押下した場合
 	public void toConfirmPage(View view){
-		
-		//インテント生成
-		Intent nextActivity = new Intent(this, OrderedConfirm.class);
-		
-		//アクティビティ起動
-		this.startActivity(nextActivity);
+		//HashMap取得
+		HashMap<String,String> itemMap = itemMapEntry();
+		if(itemMap.isEmpty()){
+			showMsg("全ての品物の個数が０個です。");
+		}else{
+			//インテント生成
+			Intent nextActivity = new Intent(this, OrderedConfirm.class);
+			nextActivity.putExtra("ITEM_MAP", itemMap);
+			this.startActivity(nextActivity);		//アクティビティ起動
+		}
 	}
+	
+	//HashMapに品物情報を登録
+	private HashMap<String,String> itemMapEntry(){
+		//TableLayout取得
+		TableLayout tLayout = (TableLayout)this.findViewById(R.id.itemInfo);
+		
+		//HashMap生成
+		HashMap<String,String> checkMap = new HashMap<String,String>();
+		
+		for(int i=0; i<tLayout.getChildCount(); i++){
+			//TableRow内のオブジェクト取得
+			TableRow row = (TableRow)tLayout.getChildAt(i);
+			TextView itemName = (TextView)row.getChildAt(0);
+			EditText itemNum = (EditText)row.getChildAt(2);
+			String num = itemNum.getText().toString();
+			
+			//itemMapに登録<品物名,個数>
+			if(!("0".equals(num)) && !("".equals(num))){
+				checkMap.put(itemName.getText().toString(), num);
+			}
+		}
+		return checkMap;		//itemMapを返す
+	}
+	
+	//ダイアログ表示
+	private void showMsg(String msg){
+		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+		dialog.setIcon(android.R.drawable.ic_menu_info_details);
+		dialog.setTitle("メッセージ");
+		dialog.setMessage(msg);
+		dialog.setCancelable(false);
+		dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				
+			}
+		});
+		dialog.show();
+	}	
 	
 	//データベース取得
 	private void getDB(){
@@ -112,7 +157,6 @@ public class Category extends Activity{
 			this.createTable(categoryName);
 			categoryCount = categoryCount + 1;
 		}
-		
 		//データベース閉じる
 		productDB.close();
 	}
@@ -140,15 +184,12 @@ public class Category extends Activity{
 					row.setVisibility(View.GONE);
 				}
 				
-				//CheckBox
-				CheckBox chk = new CheckBox(this);
-				chk.setWidth(100);
-				chk.setHighlightColor(60);
-				row.addView(chk);
-				
 				//TextView
 				TextView tv = new TextView(this);
 				tv.setText(cursor.getString(1));
+				tv.setWidth(170);
+				tv.setPadding(0, 0, 0, 70);
+				tv.setTextSize(18);
 				row.addView(tv);
 				
 				//マイナスするButtonオブジェクトを追加
@@ -207,6 +248,7 @@ public class Category extends Activity{
 		return productDB.query("product_info", COLUMNS, "product_category='" + categoryName + "'", null, null, null, "id");
 	}
 	
+	//後で今田さんのコードを反映
 	//マイナス用Buttonオブジェクト生成
 	private Button createMinusButton(){
 		//Button生成
@@ -241,6 +283,7 @@ public class Category extends Activity{
 		return mBtn;
 	}
 	
+	//後で今田さんのコードを反映
 	//プラス用Buttonオブジェクト生成
 	private Button createPlusButton(){
 		//Button生成
