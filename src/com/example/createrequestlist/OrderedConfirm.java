@@ -25,8 +25,10 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 public class OrderedConfirm extends Activity {
-	//品物情報
-	private String itemList;
+	//文言設定
+	private String mailTxt;
+	private String inputTxt;
+	
 	//おねがいリスト用レイアウト
 	private LinearLayout lLayout;
 	private TableLayout tLayout;
@@ -50,7 +52,8 @@ public class OrderedConfirm extends Activity {
 		//LinearLayout取得
 		lLayout = (LinearLayout)this.findViewById(R.id.orderedItem);
 		lLayout.removeAllViews();
-		itemList = "";
+		mailTxt = "";
+		inputTxt = "";
 		dateSet();		//日付作成
 		
 		//品物情報取得
@@ -63,8 +66,7 @@ public class OrderedConfirm extends Activity {
 		for(String itemName : itemMap.keySet()){
 			String itemNum = itemMap.get(itemName);	 	//個数取得
 			createOrderedList(itemName,itemNum);		//品物情報作成
-			itemList = itemList + "品物名：" + 			//メール本文用
-			itemName + "\n数量：" + itemNum + "\n\n";	
+			createItemText(itemName,itemNum);			//文言作成
 		}
 		lLayout.addView(tLayout);
 	}
@@ -185,7 +187,6 @@ public class OrderedConfirm extends Activity {
 		dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				
 			}
 		});
 		dialog.show();		//ダイアログ表示
@@ -257,13 +258,28 @@ public class OrderedConfirm extends Activity {
 		"お手数ですが、品物を購入もしくはいただけないでしょうか？\n" + 
 		"(※ご注意　このメールは複数宛先に送信されている場合がございます。" +
 		"詳細は宛先一覧を参照してください。)\n\n\n" +
-		"【おねがいリスト】\n" + itemList;
+		"【おねがいリスト】\n" + mailTxt;
 		return body;
+	}
+	
+	//メールandファイル用文言作成
+	private void createItemText(String itemName, String itemNum){
+		//メール本文用文言
+		mailTxt = mailTxt + "品物名：" + itemName + "\n数量：" + itemNum + "\n\n";
+		
+		//ファイル用文言
+		inputTxt = inputTxt + "'" + itemName + "','" + itemNum + "'\n";
 	}
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data){
 		if(requestCode == REQUEST_CODE){
+			//日付作成
+			Date date = new Date();
+			DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+			ProductFiles pf = new ProductFiles(this,df.format(date),inputTxt);
+			pf.fileMain();
+			
 			//トップページへ
 			Intent intent = new Intent(this,MainMenu.class);
 			startActivity(intent);

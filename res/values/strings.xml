@@ -9,9 +9,9 @@
     <string name="ToTopPage">トップページへ</string>
     
     <!-- トップページ用画面 -->
-    <string name="order_label">注文する</string>
+    <string name="order_label">おねがいする</string>
     <string name="editList_label">品物リスト編集</string>
-    <string name="orderHistory_label">注文履歴を見る</string>
+    <string name="orderHistory_label">おねがい履歴を見る</string>
     
     <!-- カテゴリ選択画面 -->
     <string name="EggAndDairyAndDrink">卵・乳製品・飲料</string>
@@ -21,7 +21,7 @@
     <string name="VegetableItems">野菜</string>
     <string name="FruitItems">果物</string>
     <string name="ElseItems">その他</string>
-    <string name="ToOrderConfirm">注文確認へ</string>
+    <string name="ToOrderConfirm">おねがい確認へ</string>
     
     <!-- 品物リスト編集画面 -->
     <string name="list_title">品物リスト編集</string>
@@ -32,7 +32,12 @@
     <string name="ItemDelete">削除する</string>
     
     <!-- お願い確認画面 -->
-    <string name="checkTxt">この内容でお願いしますか？</string>
+    <string name="checkTxt">この内容でおねがいしますか？</string>
     <string name="no">いいえ</string>
     <string name="yes">はい</string>
+    
+    <!-- お願い履歴画面 -->
+    <string name="historyTitle">おねがい履歴</string>
+    <string name="stepTxt">※ご覧になりたい日時をタッチしてください。\n最新５件までの履歴が参照できます。</string>
+    <string name="back">戻る</string>
 </resources>

@@ -35,5 +35,8 @@
         <activity 
             android:name="OrderedConfirm"
             android:screenOrientation="portrait" />
+        <activity 
+            android:name="ProductHistory"
+            android:screenOrientation="portrait" />
     </application>
 </manifest>
