@@ -7,18 +7,24 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.ImageView.ScaleType;
 
 public class Category extends Activity{
 	
@@ -47,6 +53,13 @@ public class Category extends Activity{
 	//生成したTableRowをArrayListに格納
 	private ArrayList<TableRow> tRow = new ArrayList<TableRow>();
 	
+	//リソースを持つ。
+	private static Drawable pushBackminus; // 押された時の画像
+	private static Drawable normalBackminus; // 通常時の画像
+	private static Drawable pushBackplus; // 押された時の画像
+	private static Drawable normalBackplus; // 通常時の画像
+	private Resources res;	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		//ActivityのOnCreateを実行
@@ -55,8 +68,16 @@ public class Category extends Activity{
 		//レイアウト設定ファイルの指定
 		this.setContentView(R.layout.category);
 		
+		//IME自動起動無効
+		this.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+		
 		//DB取得
 		this.getDB();
+		
+//******************************************2012/11/27 今田さんロジック反映対応(ImageViewに変更)ここから******************************************		
+		//画像ID取得
+		res = getResources();
+//******************************************2012/11/27 今田さんロジック反映対応(ImageViewに変更)ここまで******************************************
 	}
 
 	//カテゴリのボタン押下した場合
@@ -187,13 +208,20 @@ public class Category extends Activity{
 				//TextView
 				TextView tv = new TextView(this);
 				tv.setText(cursor.getString(1));
-				tv.setWidth(170);
+				tv.setWidth(230);
 				tv.setPadding(0, 0, 0, 70);
 				tv.setTextSize(18);
 				row.addView(tv);
 				
+//******************************************2012/11/27 今田さんロジック反映対応(旧Logicコメントアウト)ここから******************************************				
 				//マイナスするButtonオブジェクトを追加
-				row.addView(this.createMinusButton());
+				//row.addView(this.createMinusButton());
+//******************************************2012/11/27 今田さんロジック反映対応(旧Logicコメントアウト)ここまで******************************************
+
+//******************************************2012/11/27 今田さんロジック反映対応(ImageViewに変更)ここから******************************************				
+				//マイナスするImageViewオブジェクトを追加
+				row.addView(this.createMinusView());
+//******************************************2012/11/27 今田さんロジック反映対応(ImageViewに変更)ここまで******************************************
 				
 				//EditText
 				EditText ed = new EditText(this);
@@ -205,8 +233,15 @@ public class Category extends Activity{
 				//EditTextをArrayListに格納
 				edit.add(ed);
 				
+//******************************************2012/11/27 今田さんロジック反映対応(旧Logicコメントアウト)ここから******************************************				
 				//プラスするButtonオブジェクトを追加
-				row.addView(this.createPlusButton());
+				//row.addView(this.createPlusButton());
+//******************************************2012/11/27 今田さんロジック反映対応(旧Logicコメントアウト)ここまで******************************************
+
+//******************************************2012/11/27 今田さんロジック反映対応(ImageViewに変更)ここから******************************************				
+				//プラスするImageViewオブジェクトを追加
+				row.addView(this.createPlusView());
+//******************************************2012/11/27 今田さんロジック反映対応(ImageViewに変更)ここまで******************************************				
 				
 				//TableRowをArrayListに追加
 				tRow.add(row);
@@ -247,8 +282,9 @@ public class Category extends Activity{
 	private Cursor getProductData(String categoryName){
 		return productDB.query("product_info", COLUMNS, "product_category='" + categoryName + "'", null, null, null, "id");
 	}
-	
-	//後で今田さんのコードを反映
+
+//******************************************2012/11/27 今田さんロジック反映対応(旧Logicコメントアウト)ここから******************************************	
+	/*
 	//マイナス用Buttonオブジェクト生成
 	private Button createMinusButton(){
 		//Button生成
@@ -283,7 +319,6 @@ public class Category extends Activity{
 		return mBtn;
 	}
 	
-	//後で今田さんのコードを反映
 	//プラス用Buttonオブジェクト生成
 	private Button createPlusButton(){
 		//Button生成
@@ -316,6 +351,139 @@ public class Category extends Activity{
 		});
 		return pBtn;
 	}
+	*/
+//******************************************2012/11/27 今田さんロジック反映対応(旧Logicコメントアウト)ここまで******************************************
+
+//******************************************2012/11/27 今田さんロジック反映対応(ImageViewに変更)ここから******************************************	
+	//ImageView:プラス
+	private ImageView createPlusView(){
+		ImageView pImvw = new ImageView(this);
+		pImvw.setImageResource(R.drawable.miniplus_hb);
+		pImvw.setScaleType(ScaleType.CENTER_CROP);
+		pImvw.setTag(tagCount);
+		pImvw.setOnTouchListener(new View.OnTouchListener() 
+		{
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event){
+				// TODO 自動生成されたメソッド・スタブ
+				ImageView iV = (ImageView)v;
+				
+				if(event.getAction() == MotionEvent.ACTION_DOWN){
+					if(pushBackplus == null){
+						pushBackplus = res.getDrawable(R.drawable.miniplus);
+					}
+					iV.setImageDrawable(pushBackplus);
+				}else if(event.getAction() == MotionEvent.ACTION_CANCEL){
+					if(normalBackplus == null){
+						normalBackplus = res.getDrawable(R.drawable.miniplus_hb);
+					}
+					iV.setImageDrawable(normalBackplus);
+				}else if(event.getAction() == MotionEvent.ACTION_UP) {
+					if(normalBackplus == null){
+						normalBackplus = res.getDrawable(R.drawable.miniplus_hb);
+					}
+					iV.setImageDrawable(normalBackplus);
+				}
+				return false;
+			}
+		});
+		
+		pImvw.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Integer num = null;
+				//ImageViewクラスにキャスト
+				ImageView iV = (ImageView)v;
+				
+				//ImageViewオブジェクトに設定したタグを取得(Integer変換)
+				Integer i = (Integer)iV.getTag();
+				
+				
+				//ArrayListに格納したEditTextインスタンスをカウントを利用して取得する
+				EditText editNum = edit.get(i);
+
+				if (!((editNum.getText().toString()).equals(""))) {
+					num = Integer.valueOf(editNum.getText().toString());
+					num = num + 1;
+				}else{
+					num = 1;
+				}
+				//プラスした値をEditTextに再設定する
+				editNum.setText(String.valueOf(num));
+//				iV.setImageResource(R.drawable.miniplus_hb);
+
+			}
+		});
+
+		return pImvw;
+	}
+		
+	//ImageView:マイナス
+	private ImageView createMinusView(){
+		ImageView mImvw = new ImageView(this);
+		mImvw.setImageResource(R.drawable.miniminus_hb);
+		mImvw.setScaleType(ScaleType.CENTER_CROP);
+		mImvw.setTag(tagCount);
+		//押下している間の画像変更
+		mImvw.setOnTouchListener(new View.OnTouchListener() 
+		{
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event){
+				// TODO 自動生成されたメソッド・スタブ
+				ImageView iV = (ImageView)v;
+				if(event.getAction() == MotionEvent.ACTION_DOWN){
+					if(pushBackminus == null){
+						pushBackminus = res.getDrawable(R.drawable.miniminus);
+					}
+					iV.setImageDrawable(pushBackminus);
+					
+				}else if(event.getAction() == MotionEvent.ACTION_CANCEL){
+					if(normalBackminus == null){
+						normalBackminus = res.getDrawable(R.drawable.miniminus_hb);
+					}
+					iV.setImageDrawable(normalBackminus);
+					
+				}else if(event.getAction() == MotionEvent.ACTION_UP) {
+					if(normalBackminus == null){
+						normalBackminus = res.getDrawable(R.drawable.miniminus_hb);
+					}
+					iV.setImageDrawable(normalBackminus);
+				}
+				return false;
+			}
+		});
+		
+		mImvw.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO 自動生成されたメソッド・スタブ
+				Integer num = null;
+				ImageView iV = (ImageView)v;
+				Integer i = (Integer)iV.getTag();
+				EditText editNum = edit.get(i);
+				
+				//Log.d("おしたボタン：", String.valueOf(i-1));
+				if (!((editNum.getText().toString()).equals(""))) {
+					num = Integer.valueOf(editNum.getText().toString());
+				
+					if ((num > 0) && (num != null)) {							
+						num = num - 1;
+					}
+					editNum.setText(String.valueOf(num));
+				}
+				
+				//Toast.makeText(Category.this, String.valueOf(count2), Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+		
+		return mImvw;
+	}	
+//******************************************2012/11/27 今田さんロジック反映対応(ImageViewに変更)ここまで******************************************
 	
 	//Backキー無効
 	@Override

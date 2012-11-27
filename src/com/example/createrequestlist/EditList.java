@@ -309,6 +309,9 @@ public class EditList extends Activity{
 		if("".equals(item_name.trim())){
 			showMsg("品物名が未入力です。\n" + modeType + "処理を終了します。");
 			return false;
+		}else if(item_name.indexOf(",") != -1){
+			showMsg("品物名にコンマ(,)は使用できません。\n" + modeType + "処理を終了します。");
+			return false;
 		}else{
 			return true;
 		}
