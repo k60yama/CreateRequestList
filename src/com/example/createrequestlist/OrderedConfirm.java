@@ -209,7 +209,7 @@ public class OrderedConfirm extends Activity {
 				emailMainHandling();
 			}
 		});
-		dialog.setNegativeButton("戻る", new DialogInterface.OnClickListener() {
+		dialog.setNegativeButton("閉じる", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 			}

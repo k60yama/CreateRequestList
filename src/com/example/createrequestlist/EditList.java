@@ -131,6 +131,7 @@ public class EditList extends Activity{
 		
 		//ダイアログ生成
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+		dialog.setIcon(android.R.drawable.ic_menu_info_details);
 		dialog.setTitle("変更モード選択ダイアログ");
 		dialog.setSingleChoiceItems(EDIT_MODES, 0, new DialogInterface.OnClickListener() {
 			@Override
@@ -205,6 +206,7 @@ public class EditList extends Activity{
 				
 		//ダイアログ生成
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+		dialog.setIcon(android.R.drawable.ic_menu_info_details);
 		dialog.setTitle("品物入力ダイアログ");
 		dialog.setMessage("品物名を入力してください。");
 		dialog.setView(itemName);
@@ -240,6 +242,7 @@ public class EditList extends Activity{
 		
 		//ダイアログ生成
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+		dialog.setIcon(android.R.drawable.ic_menu_info_details);
 		dialog.setTitle("種別選択ダイアログ");
 		dialog.setSingleChoiceItems(Category.CATEGORIES, 0, new DialogInterface.OnClickListener() {
 			@Override
@@ -267,6 +270,7 @@ public class EditList extends Activity{
 	private void confirmDialog(){
 		//ダイアログ生成
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+		dialog.setIcon(android.R.drawable.ic_menu_info_details);
 		dialog.setTitle("確認ダイアログ");
 		dialog.setMessage(confirmTxt());
 		dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {

@@ -13,13 +13,12 @@
             android:layout_height="wrap_content"
             android:text="@string/list_title"
             android:textSize="25dp"
-            android:layout_weight="9" />
+            android:layout_weight="1" />
         <Button
             android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ToTopPage"
-            android:layout_weight="1"
             android:onClick="returnTopPage" />
     </LinearLayout>
         
@@ -37,7 +36,7 @@
         android:layout_height="340dp">
     	<ScrollView
         	android:layout_width="wrap_content"
-        	android:layout_height="match_parent">
+        	android:layout_height="wrap_content">
         	<LinearLayout
         	    android:id="@+id/itemInfo"
         	    android:layout_width="match_parent"
