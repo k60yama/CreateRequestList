@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+        <!--  ImageButtonに変更
      	<Button 
 	    	android:id="@+id/EggAndDairyAndDrink"
 	        android:text="@string/EggAndDairyAndDrink"
@@ -30,12 +31,44 @@
 	        android:layout_weight="1"
 	        android:layout_height="wrap_content"
 	        android:onClick="orderItemInfo" />
+	        -->
+	    <ImageButton 
+	        android:id="@+id/EggAndDairyAndDrink"
+	        android:background="@null"
+	        android:layout_width="0dp"
+	        android:layout_weight="2"
+	        android:layout_height="wrap_content"
+	        android:tag="@string/EggAndDairyAndDrink"
+	        android:contentDescription="@string/EggAndDairyAndDrink"
+	        android:src="@drawable/push_egg"
+	        android:onClick="orderItemInfo" />
+	    <ImageButton 
+	        android:id="@+id/ProcessItems"
+	        android:background="@null"
+	        android:layout_width="0dp"
+	        android:layout_weight="1"
+	        android:layout_height="wrap_content"
+	        android:tag="@string/ProcessItems"
+	        android:contentDescription="@string/ProcessItems"
+	        android:src="@drawable/process"
+	        android:onClick="orderItemInfo" />
+	    <ImageButton 
+	        android:id="@+id/FishItems"
+	        android:background="@null"
+	        android:layout_width="0dp"
+	        android:layout_weight="1"
+	        android:layout_height="wrap_content"
+	        android:contentDescription="@string/FishItems"
+	        android:tag="@string/FishItems"
+	        android:src="@drawable/fish"
+	        android:onClick="orderItemInfo" />
     </LinearLayout>
     
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+	    <!-- ImageButtonに変更
 	  	<Button 
 	     	android:id="@+id/MeetItems"
 	        android:layout_width="0dp"
@@ -64,6 +97,47 @@
 			android:layout_height="wrap_content"
 			android:text="@string/ElseItems"
 			android:onClick="orderItemInfo" />
+		-->
+	    <ImageButton 
+	        android:id="@+id/MeetItems"
+	        android:background="@null"
+	        android:layout_width="0dp"
+	        android:layout_weight="1"
+	        android:layout_height="wrap_content"
+	        android:tag="@string/MeetItems"
+	        android:contentDescription="@string/MeetItems"
+	        android:src="@drawable/meet"
+	        android:onClick="orderItemInfo" />
+	    <ImageButton 
+	        android:id="@+id/VegetableItems"
+	        android:background="@null"
+	        android:layout_width="0dp"
+	        android:layout_weight="1"
+	        android:layout_height="wrap_content"
+	        android:tag="@string/VegetableItems"
+	        android:contentDescription="@string/VegetableItems"
+	        android:src="@drawable/vegetable"
+	        android:onClick="orderItemInfo" />
+	    <ImageButton 
+	        android:id="@+id/FruitItems"
+	        android:background="@null"
+	        android:layout_width="0dp"
+	        android:layout_weight="1"
+	        android:layout_height="wrap_content"
+	        android:tag="@string/FruitItems"
+	        android:contentDescription="@string/FruitItems"
+	        android:src="@drawable/fruit"
+	        android:onClick="orderItemInfo" />
+	    <ImageButton 
+	        android:id="@+id/ElseItems"
+	        android:background="@null"
+	        android:layout_width="0dp"
+	        android:layout_weight="1"
+	        android:layout_height="wrap_content"
+	        android:tag="@string/ElseItems"
+	        android:contentDescription="@string/ElseItems"
+	        android:src="@drawable/etc"
+	        android:onClick="orderItemInfo" />
     </LinearLayout>
     <!-- カテゴリ選択ボタン群 ここまで -->
     

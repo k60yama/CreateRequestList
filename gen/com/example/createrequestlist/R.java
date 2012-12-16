@@ -11,12 +11,26 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int ic_action_search=0x7f020000;
-        public static final int ic_launcher=0x7f020001;
-        public static final int miniminus=0x7f020002;
-        public static final int miniminus_hb=0x7f020003;
-        public static final int miniplus=0x7f020004;
-        public static final int miniplus_hb=0x7f020005;
+        public static final int egg=0x7f020000;
+        public static final int etc=0x7f020001;
+        public static final int fish=0x7f020002;
+        public static final int fruit=0x7f020003;
+        public static final int ic_action_search=0x7f020004;
+        public static final int ic_launcher=0x7f020005;
+        public static final int meet=0x7f020006;
+        public static final int miniminus=0x7f020007;
+        public static final int miniminus_hb=0x7f020008;
+        public static final int miniplus=0x7f020009;
+        public static final int miniplus_hb=0x7f02000a;
+        public static final int process=0x7f02000b;
+        public static final int push_egg=0x7f02000c;
+        public static final int push_etc=0x7f02000d;
+        public static final int push_fish=0x7f02000e;
+        public static final int push_fruit=0x7f02000f;
+        public static final int push_meet=0x7f020010;
+        public static final int push_process=0x7f020011;
+        public static final int push_vegetable=0x7f020012;
+        public static final int vegetable=0x7f020013;
     }
     public static final class id {
         public static final int EggAndDairyAndDrink=0x7f070000;

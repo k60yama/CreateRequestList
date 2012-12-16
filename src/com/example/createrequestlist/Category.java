@@ -18,8 +18,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -82,11 +82,17 @@ public class Category extends Activity{
 
 	//カテゴリのボタン押下した場合
 	public void orderItemInfo(View view){
-		//Button型にキャスト
-		Button categoryBtn = (Button)view;
+		//ImageButton型にキャスト
+		ImageButton categoryBtn = (ImageButton)view;
 		
 		//表示するカテゴリ名称取得
-		String categoryName = categoryBtn.getText().toString();
+		String categoryName = categoryBtn.getTag().toString();
+		
+		//画像初期化
+		resetImageButton();
+		
+		//画像設定
+		setImageButton(categoryBtn, categoryName);
 		
 		//表示・非表示の制御(ArrayListに格納したTableRow分繰り返す)
 		String categoryTag;
@@ -101,6 +107,53 @@ public class Category extends Activity{
 				tRow.get(i).setVisibility(View.GONE);	//非表示
 			}
 		}
+	}
+	
+	//ImageButton画像初期化
+	public void resetImageButton(){
+		//ImageView各々のインスタンスを保持
+		ImageView eggVw = (ImageView)findViewById(R.id.EggAndDairyAndDrink);
+		ImageView processVw = (ImageView)findViewById(R.id.ProcessItems);
+		ImageView fishVw = (ImageView)findViewById(R.id.FishItems);
+		ImageView meetVw = (ImageView)findViewById(R.id.MeetItems);
+		ImageView vegetableVw = (ImageView)findViewById(R.id.VegetableItems);
+		ImageView fruitVw = (ImageView)findViewById(R.id.FruitItems);
+		ImageView elseVw = (ImageView)findViewById(R.id.ElseItems);
+
+		//一律カテゴリボタンを初期に戻す
+		eggVw.setImageResource(R.drawable.egg);
+		processVw.setImageResource(R.drawable.process);
+		fishVw.setImageResource(R.drawable.fish);
+		meetVw.setImageResource(R.drawable.meet);
+		vegetableVw.setImageResource(R.drawable.vegetable);
+		fruitVw.setImageResource(R.drawable.fruit);
+		elseVw.setImageResource(R.drawable.etc);
+	}
+	
+	//ImageButton画像設定
+	public void setImageButton(ImageView categoryBtn, String categoryName){
+		//押し下のボタンだけ反転
+		if(categoryName.equals("卵・乳製品・飲料")){
+			categoryBtn.setImageResource(R.drawable.push_egg);
+
+		}else if(categoryName.equals("加工品")){
+			categoryBtn.setImageResource(R.drawable.push_process);
+
+		}else if(categoryName.equals("魚介")){
+			categoryBtn.setImageResource(R.drawable.push_fish);
+
+		}else if(categoryName.equals("肉類")){
+			categoryBtn.setImageResource(R.drawable.push_meet);
+
+		}else if(categoryName.equals("野菜")){
+			categoryBtn.setImageResource(R.drawable.push_vegetable);
+
+		}else if(categoryName.equals("果物")){
+			categoryBtn.setImageResource(R.drawable.push_fruit);
+
+		}else if(categoryName.equals("その他")){
+			categoryBtn.setImageResource(R.drawable.push_etc);
+		}		
 	}
 	
 	//トップページへ押下した場合
