@@ -4,21 +4,30 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 
 public class MainMenu extends Activity implements OnClickListener{
-	
+
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         //ActivityのOnCreate実行
     	super.onCreate(savedInstanceState);
         
+    	//カスタムタイトルバーを使用
+    	this.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+    	
     	//レイアウト設定ファイルの指定
         this.setContentView(R.layout.main);
+        final Typeface tf = Typeface.createFromAsset(this.getAssets(), "fonts/JohnHancockCP.otf");
+        this.setHeader(tf);			//ヘッダー
+        this.setFooter(tf);			//フッター
         
         //データベース事前設定
         this.setDataBase();
@@ -93,6 +102,23 @@ public class MainMenu extends Activity implements OnClickListener{
 		dialog.show();
 	}
     
+	//ヘッダーのカスタマイズ
+	private void setHeader(Typeface tf){
+		//タイトル用のレイアウト設定
+		this.getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.main_titlebar);
+		
+		//TextView オブジェクト取得
+		TextView title = (TextView)this.findViewById(R.id.title);
+		title.setTypeface(tf);
+	}
+	
+	//フッターのカスタマイズ
+	private void setFooter(Typeface tf){
+		//TextView オブジェクト取得
+		TextView footer = (TextView)this.findViewById(R.id.footer);
+		footer.setTypeface(tf);
+	}
+	
 	//Backキー無効
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event){

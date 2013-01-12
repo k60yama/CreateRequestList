@@ -1,17 +1,23 @@
 <resources>
 
-    <string name="app_name">おねがいリスト</string>
+    <string name="app_name">ちょっと、おつかい!</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
 
+    <!-- ヘッダー用 -->
+    <string name="titleIcon">icon</string>
+    
+    <!-- フッター用 -->
+    <string name="footer">created by @Teamしあわせ</string>
+    
     <!-- 共通 -->
     <string name="ToTopPage">トップページへ</string>
     
     <!-- トップページ用画面 -->
     <string name="order_label">おねがいする</string>
-    <string name="editList_label">品物リスト編集</string>
-    <string name="orderHistory_label">おねがい履歴を見る</string>
+    <string name="editList_label">品物編集</string>
+    <string name="orderHistory_label">履歴閲覧</string>
     
     <!-- カテゴリ選択画面 -->
     <string name="EggAndDairyAndDrink">卵・乳製品・飲料</string>
