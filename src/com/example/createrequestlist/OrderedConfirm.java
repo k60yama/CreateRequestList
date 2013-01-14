@@ -6,11 +6,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Typeface;
@@ -18,6 +26,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.CommonDataKinds.Email;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -199,7 +208,7 @@ public class OrderedConfirm extends Activity {
 		String email = cur.getString(cur.getColumnIndex(Email.DATA1));				
 		
 		//ユーザー情報設定(ダイアログ表示用)
-		String userInfo = name + "さん\n" + "(" + emailType + ")";
+		String userInfo = name + "\n" + "(" + emailType + ")";
 		usersName[userIndex] = userInfo;		
 		checkStatus[userIndex] = false;
 		
@@ -261,10 +270,12 @@ public class OrderedConfirm extends Activity {
 		if("".equals(mailAddress)){
 			showMsg("宛先が選択されいてません。");
 		}else{
-			emailAppStart(mailAddress);
+			//emailAppStart(mailAddress);
+			send_Gmail(mailAddress);
 		}
 	}
 	
+	/*
 	//E-MAIL起動処理
 	private void emailAppStart(String mailAddress){
 		//URI設定(宛先)
@@ -280,6 +291,44 @@ public class OrderedConfirm extends Activity {
 		//アクティビティ実行
 		startActivityForResult(intent, REQUEST_CODE);		
 	}
+	*/
+	
+	//JavaMailで送信処理
+	private void send_Gmail(String mailAddress){
+		//プリファレンス取得
+		SharedPreferences pref = this.getSharedPreferences(MailSetUp.FILE_NAME, MODE_PRIVATE);
+		String user = pref.getString("MAIL", "");
+		String pass = pref.getString("PASS", "");
+
+		//Propertiesクラスのインスタンス生成
+		Properties prop = new Properties();
+		prop.put("mail.smtp.host", "smtp.gmail.com");	//SMTPサーバー名
+		prop.put("mail.smtp.port", "587");				//SMTPサーバーポート
+		prop.put("mail.smtp.auth", "true");				//SMTP認証
+		prop.put("mail.smtp.starttls.enable", "true");	//STTLS
+
+		//セッション生成
+		Session session = Session.getInstance(prop);
+
+		//メッセージ生成
+		MimeMessage mimeMsg = new MimeMessage(session);
+		try {
+			mimeMsg.setFrom(new InternetAddress(user));	//Fromアドレス設定
+			mimeMsg.setRecipient(Message.RecipientType.TO, new InternetAddress(mailAddress));	//送信先設定
+			mimeMsg.setContent("body","text/plain; utf-8");
+			mimeMsg.setHeader("Content-Transfer-Encoding", "7bit");
+			mimeMsg.setSubject("【おねがい】必要な品物あり");	//件名
+			mimeMsg.setText(createBodyMsg(),"utf-8");	//本文
+
+			Transport transport = session.getTransport("smtp");
+			transport.connect(user,pass);
+			transport.sendMessage(mimeMsg, mimeMsg.getAllRecipients());	//メール送信
+			transport.close();
+		} catch (Exception e) {
+			Log.e("mailSendErr", "メール送信に失敗しました。");
+		}
+	}
+	
 	
 	//本文作成処理
 	private String createBodyMsg(){
