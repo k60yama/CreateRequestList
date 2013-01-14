@@ -13,12 +13,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -46,9 +49,13 @@ public class OrderedConfirm extends Activity {
 		//ActivityクラスのonCreateを実行
 		super.onCreate(savedInstanceState);
 		
-		//レイアウト設定ファイルの指定
+		//カスタムタイトルバーを使用
+		this.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);		
 		this.setContentView(R.layout.ordered_confirm);
-		
+		final Typeface tf = Typeface.createFromAsset(this.getAssets(), "fonts/JohnHancockCP.otf");
+	    this.setHeader(tf);		//ヘッダー
+	    this.setFooter(tf);		//フッター
+	    
 		//LinearLayout取得
 		lLayout = (LinearLayout)this.findViewById(R.id.orderedItem);
 		lLayout.removeAllViews();
@@ -71,6 +78,27 @@ public class OrderedConfirm extends Activity {
 		lLayout.addView(tLayout);
 	}
 	
+	
+	private void setHeader(Typeface tf){
+		//タイトル用のレイアウト設定
+		this.getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.ordered_confirm_titlebar);
+		
+		//TextView オブジェクト取得
+		TextView title = (TextView)this.findViewById(R.id.ordered_confirm_title);
+		title.setTypeface(tf);
+		
+		//Button オブジェクト取得
+		Button button = (Button)this.findViewById(R.id.BackButton);
+		button.setTypeface(tf);
+	}
+	
+	private void setFooter(Typeface tf){
+		//TextView オブジェクト取得
+		TextView footer = (TextView)this.findViewById(R.id.footer);
+		footer.setTypeface(tf);		
+	}
+	
+	
 	private void dateSet(){
 		//日付設定
 		DateFormat format = new SimpleDateFormat("yyyy年MMMMd日");
@@ -79,8 +107,10 @@ public class OrderedConfirm extends Activity {
 		//TextView生成
 		TextView date = new TextView(this);
 		date.setText(dateTxt);
-		date.setTextSize(30);
-		date.setPadding(0, 0, 0, 30);
+		date.setTextSize(26);
+		date.setPadding(5, 0, 0, 30);
+		date.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_menu_more, 0, 0, 0);
+		date.setGravity(Gravity.CENTER);
 		lLayout.addView(date);	//LinearLayoutに追加
 	}
 	
@@ -92,12 +122,12 @@ public class OrderedConfirm extends Activity {
 		head.setPadding(20, 0, 0, 40);
 		TextView hName = new TextView(this);
 		hName.setText("品物名");
-		hName.setTextSize(25);
+		hName.setTextSize(22);
 		head.addView(hName);
 		
 		TextView hNum = new TextView(this);
 		hNum.setText("数量");
-		hNum.setTextSize(25);
+		hNum.setTextSize(22);
 		hNum.setGravity(Gravity.CENTER_HORIZONTAL);
 		head.addView(hNum);
 		tLayout.addView(head);
@@ -109,14 +139,14 @@ public class OrderedConfirm extends Activity {
 		row.setPadding(20, 0, 0, 30);
 		TextView name = new TextView(this);
 		name.setText(itemName);
-		name.setTextSize(20);
-		name.setWidth(380);
+		name.setTextSize(18);
+		name.setWidth(335);
 		name.setPadding(0, 0, 40, 0);
 		row.addView(name);
 		
 		TextView num = new TextView(this);
 		num.setText(itemNum);
-		num.setTextSize(20);
+		num.setTextSize(18);
 		num.setGravity(Gravity.CENTER_HORIZONTAL);
 		row.addView(num);
 		tLayout.addView(row);

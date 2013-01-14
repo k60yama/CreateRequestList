@@ -18,6 +18,7 @@ public class ProductDBHelper extends SQLiteOpenHelper {
 	private static final String DB_NAME = "product";				//データベース名
 	private static final String DB_NAME_ASSET = "product.sqlite3";	//事前に作成したデータベースファイル
 	private final Context context;									//呼び出し元のアクティビティ保持用
+	private SQLiteDatabase mdb;
 
 	public ProductDBHelper(Context con){
 		//データベースを開く
@@ -91,7 +92,8 @@ public class ProductDBHelper extends SQLiteOpenHelper {
 	public SQLiteDatabase openDataBase(){
 		
 		//データベースを書き込みモードで開く
-		return SQLiteDatabase.openDatabase(this.DB_FILE_PATH, null, SQLiteDatabase.OPEN_READWRITE);
+		this.mdb = SQLiteDatabase.openDatabase(this.DB_FILE_PATH, null, SQLiteDatabase.OPEN_READWRITE);
+		return this.mdb;
 	}
 	
 	@Override
@@ -100,5 +102,13 @@ public class ProductDBHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+	}
+	
+	@Override
+	public synchronized void close(){
+		if(this.mdb != null){
+			this.mdb.close();
+		}
+		super.close();
 	}
 }

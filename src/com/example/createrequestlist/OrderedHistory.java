@@ -9,13 +9,17 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class OrderedHistory extends Activity implements OnItemClickListener{
 
@@ -26,8 +30,12 @@ public class OrderedHistory extends Activity implements OnItemClickListener{
 		//ActivityクラスのonCreateを実行
 		super.onCreate(savedInstanceState);
 		
-		//レイアウト設定ファイルの指定
+		//カスタムタイトルバーを使用
+		this.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		this.setContentView(R.layout.ordered_history);
+		final Typeface tf = Typeface.createFromAsset(this.getAssets(), "fonts/JohnHancockCP.otf");
+	    this.setHeader(tf);		//ヘッダー
+	    this.setFooter(tf);		//フッター
 		
 		//ListViewの設定
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1);
@@ -38,6 +46,26 @@ public class OrderedHistory extends Activity implements OnItemClickListener{
 		}
 		listview.setAdapter(adapter);
 		listview.setOnItemClickListener(this);	//クリックリスナーの設定
+	}
+	
+	
+	private void setHeader(Typeface tf){
+		//タイトル用のレイアウト設定
+		this.getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.ordered_history_titlebar);
+		
+		//TextView オブジェクト取得
+		TextView title = (TextView)this.findViewById(R.id.historyTitle);
+		title.setTypeface(tf);
+		
+		//Button オブジェクト取得
+		Button button = (Button)this.findViewById(R.id.homeButton);
+		button.setTypeface(tf);
+	}
+	
+	private void setFooter(Typeface tf){
+		//TextView オブジェクト取得
+		TextView footer = (TextView)this.findViewById(R.id.footer);
+		footer.setTypeface(tf);		
 	}
 	
 	//ファイル取得

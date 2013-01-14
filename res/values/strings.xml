@@ -9,17 +9,21 @@
     <string name="titleIcon">icon</string>
     
     <!-- フッター用 -->
-    <string name="footer">created by @Teamしあわせ</string>
+    <string name="footer">（C） 2013　Team しあわせ</string>
     
     <!-- 共通 -->
     <string name="ToTopPage">トップページへ</string>
+    <string name="ToMain">ホームへ</string>
+    <string name="back">もどる</string>
     
     <!-- トップページ用画面 -->
     <string name="order_label">おねがいする</string>
     <string name="editList_label">品物編集</string>
     <string name="orderHistory_label">履歴閲覧</string>
+    <string name="mail_setup">Gmail アカウント設定</string>
     
     <!-- カテゴリ選択画面 -->
+    <string name="category_title">品物選択画面</string>
     <string name="EggAndDairyAndDrink">卵・乳製品・飲料</string>
     <string name="ProcessItems">加工品</string>
     <string name="FishItems">魚介</string>
@@ -27,23 +31,26 @@
     <string name="VegetableItems">野菜</string>
     <string name="FruitItems">果物</string>
     <string name="ElseItems">その他</string>
-    <string name="ToOrderConfirm">おねがい確認へ</string>
+    <string name="ToOrderConfirm">おねがい確認画面へ</string>
     
     <!-- 品物リスト編集画面 -->
-    <string name="list_title">品物リスト編集</string>
-    <string name="list_warning">※「変更する」・「削除する」場合は【品物リスト】から品物を一つ選択してください。</string>
-    <string name="Itemlist">【品物リスト】</string>
+    <string name="list_title">品物編集画面</string>
+    <!--  <string name="list_warning">※「変更する」・「削除する」場合は【品物リスト】から品物を一つ選択してください。</string>
+    <string name="Itemlist">【品物リスト】</string>-->
     <string name="ItemAdd">追加する</string>
     <string name="ItemUpdate">変更する</string>
     <string name="ItemDelete">削除する</string>
     
     <!-- お願い確認画面 -->
-    <string name="checkTxt">この内容でおねがいしますか？</string>
-    <string name="no">いいえ</string>
-    <string name="yes">はい</string>
+    <string name="ordered_confirm_title">確認画面</string>
+    <string name="checkTxt">この内容でメールを\n送信しますか？</string>
+    <!--  <string name="no">いいえ</string> -->
+    <string name="yes">メールを送信する</string>
     
-    <!-- お願い履歴画面 -->
-    <string name="historyTitle">おねがい履歴</string>
-    <string name="stepTxt">※ご覧になりたい日時をタッチしてください。\n最新５件までの履歴が参照できます。</string>
-    <string name="back">戻る</string>
+    <!-- お願い履歴一覧画面 -->
+    <string name="historyTitle">履歴一覧画面</string>
+    <string name="stepTxt">最新５件までの履歴が参照できます。ご覧になりたい日時をタップしてください。</string>
+    
+	<!-- お願い履歴内容画面 -->
+    <string name="historyInfoTitle">履歴内容画面</string>
 </resources>

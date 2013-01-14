@@ -8,10 +8,13 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -48,11 +51,36 @@ public class EditList extends Activity{
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		this.setContentView(R.layout.edit_list);
+		
+		//カスタムタイトルバーを使用
+		this.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+		this.setContentView(R.layout.edit_list);	//レイアウト
+		final Typeface tf = Typeface.createFromAsset(this.getAssets(), "fonts/JohnHancockCP.otf");
+	    this.setHeader(tf);		//ヘッダー
+	    this.setFooter(tf);		//フッター		
 		
 		//データ取得
 		this.getData();
 	}
+	
+	private void setHeader(Typeface tf){
+		//タイトル用のレイアウト設定
+		this.getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.edit_titlebar);
+		
+		//TextView オブジェクト取得
+		TextView title = (TextView)this.findViewById(R.id.list_title);
+		title.setTypeface(tf);
+		
+		//Button オブジェクト取得
+		Button button = (Button)this.findViewById(R.id.homeButton);
+		button.setTypeface(tf);
+	}
+	
+	private void setFooter(Typeface tf){
+		//TextView オブジェクト取得
+		TextView footer = (TextView)this.findViewById(R.id.footer);
+		footer.setTypeface(tf);		
+	}	
 	
 	@Override
 	protected void onDestroy() {

@@ -2,38 +2,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/tile_bg"
     android:orientation="vertical" >
-    <!-- ヘッダー -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/historyTitle"
-            android:textSize="25dp"
-            android:layout_weight="1" />
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ToTopPage"
-            android:onClick="returnTopPage" />
-    </LinearLayout>
-    
     <!-- 注記文言 -->
     <TextView 
         android:text="@string/stepTxt"
-        android:layout_marginTop="10dp"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:background="@drawable/text_bg"
+        android:drawableLeft="@drawable/ic_menu_info_details"
+        android:padding="5dip"
+        android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     
     <!-- 日付選択 -->
     <ListView
 	   android:id="@+id/listview"
+	   android:background="@drawable/text_bg"
+	   android:cacheColorHint="#f5f5f5"
 	   android:layout_width="match_parent"
-	   android:layout_height="match_parent" >
+	   android:layout_marginLeft="15dp"
+	   android:layout_marginRight="15dp"
+	   android:layout_marginBottom="15dp"
+	   android:layout_height="0dip"
+	   android:layout_weight="1" >
     </ListView>
     
+    <!-- フッター -->
+    <include layout="@layout/footer"/>
 </LinearLayout>

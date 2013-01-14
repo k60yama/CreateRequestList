@@ -8,181 +8,137 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="5dip"
         android:orientation="horizontal">
-        <!--  ImageButtonに変更
      	<Button 
 	    	android:id="@+id/EggAndDairyAndDrink"
 	        android:text="@string/EggAndDairyAndDrink"
+	        android:textColor="@drawable/button_text_stateful"
 	        android:layout_width="0dp"
 	        android:layout_weight="2"
 	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="5dip"
+	        android:layout_marginRight="5dip"
+	        android:padding="5dip"
+	        android:background="@drawable/category_btn_pressed"
+	        android:drawableLeft="@drawable/milk"
 	        android:onClick="orderItemInfo" />
 	    <Button 
 	        android:id="@+id/ProcessItems"
 	        android:text="@string/ProcessItems"
+	        android:textColor="@drawable/button_text_stateful"
 	        android:layout_width="0dp"
 	        android:layout_weight="1"
 	        android:layout_height="wrap_content"
+	        android:layout_marginRight="5dip"	        
+	        android:padding="5dip"
+	        android:background="@drawable/category_btn_normal"
+	        android:drawableLeft="@drawable/progress"	        
 	        android:onClick="orderItemInfo" />
 	    <Button 
 	        android:id="@+id/FishItems"
 	        android:text="@string/FishItems"
+	        android:textColor="@drawable/button_text_stateful"	        
 	        android:layout_width="0dp"
 	        android:layout_weight="1"
 	        android:layout_height="wrap_content"
-	        android:onClick="orderItemInfo" />
-	        -->
-	    <ImageButton 
-	        android:id="@+id/EggAndDairyAndDrink"
-	        android:background="@null"
-	        android:layout_width="0dp"
-	        android:layout_weight="2"
-	        android:layout_height="wrap_content"
-	        android:tag="@string/EggAndDairyAndDrink"
-	        android:contentDescription="@string/EggAndDairyAndDrink"
-	        android:src="@drawable/push_egg"
-	        android:onClick="orderItemInfo" />
-	    <ImageButton 
-	        android:id="@+id/ProcessItems"
-	        android:background="@null"
-	        android:layout_width="0dp"
-	        android:layout_weight="1"
-	        android:layout_height="wrap_content"
-	        android:tag="@string/ProcessItems"
-	        android:contentDescription="@string/ProcessItems"
-	        android:src="@drawable/process"
-	        android:onClick="orderItemInfo" />
-	    <ImageButton 
-	        android:id="@+id/FishItems"
-	        android:background="@null"
-	        android:layout_width="0dp"
-	        android:layout_weight="1"
-	        android:layout_height="wrap_content"
-	        android:contentDescription="@string/FishItems"
-	        android:tag="@string/FishItems"
-	        android:src="@drawable/fish"
+	        android:layout_marginRight="5dip"	        
+	        android:padding="5dip"
+	        android:background="@drawable/category_btn_normal"
+	        android:drawableLeft="@drawable/fish"	        
 	        android:onClick="orderItemInfo" />
     </LinearLayout>
-    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dip"        
         android:orientation="horizontal">
-	    <!-- ImageButtonに変更
 	  	<Button 
 	     	android:id="@+id/MeetItems"
 	        android:layout_width="0dp"
 	        android:layout_weight="1"
 	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="5dip"
+	        android:layout_marginRight="5dip"
+	        android:padding="5dip"
 	        android:text="@string/MeetItems"
+	        android:textColor="@drawable/button_text_stateful"	        
+	        android:background="@drawable/category_btn_normal"
+	        android:drawableLeft="@drawable/meat"	        
 	        android:onClick="orderItemInfo" />
 	    <Button 
 	        android:id="@+id/VegetableItems"
 	      	android:layout_width="0dp"
 	        android:layout_weight="1"
 	        android:layout_height="wrap_content"
+	        android:layout_marginRight="5dip"
+	        android:padding="5dip"
 	        android:text="@string/VegetableItems"
+	        android:textColor="@drawable/button_text_stateful"	        
+	        android:background="@drawable/category_btn_normal"
+	        android:drawableLeft="@drawable/tomato"	        
 	        android:onClick="orderItemInfo" />
 	    <Button 
 	    	android:id="@+id/FruitItems"
 	        android:layout_width="0dp"
 	        android:layout_weight="1"
 	        android:layout_height="wrap_content"
+	        android:layout_marginRight="5dip"
+	        android:padding="5dip"
 	        android:text="@string/FruitItems"
+	        android:textColor="@drawable/button_text_stateful"	        
+	        android:background="@drawable/category_btn_normal"
+	        android:drawableLeft="@drawable/strawberry"	        
 	        android:onClick="orderItemInfo" />
 	    <Button 
 			android:id="@+id/ElseItems"
 			android:layout_width="0dp"
 			android:layout_weight="1"
 			android:layout_height="wrap_content"
+			android:layout_marginRight="5dip"
+	        android:padding="5dip"
 			android:text="@string/ElseItems"
+	        android:textColor="@drawable/button_text_stateful"	        
+	        android:background="@drawable/category_btn_normal"
+	        android:drawableLeft="@drawable/source"			
 			android:onClick="orderItemInfo" />
-		-->
-	    <ImageButton 
-	        android:id="@+id/MeetItems"
-	        android:background="@null"
-	        android:layout_width="0dp"
-	        android:layout_weight="1"
-	        android:layout_height="wrap_content"
-	        android:tag="@string/MeetItems"
-	        android:contentDescription="@string/MeetItems"
-	        android:src="@drawable/meet"
-	        android:onClick="orderItemInfo" />
-	    <ImageButton 
-	        android:id="@+id/VegetableItems"
-	        android:background="@null"
-	        android:layout_width="0dp"
-	        android:layout_weight="1"
-	        android:layout_height="wrap_content"
-	        android:tag="@string/VegetableItems"
-	        android:contentDescription="@string/VegetableItems"
-	        android:src="@drawable/vegetable"
-	        android:onClick="orderItemInfo" />
-	    <ImageButton 
-	        android:id="@+id/FruitItems"
-	        android:background="@null"
-	        android:layout_width="0dp"
-	        android:layout_weight="1"
-	        android:layout_height="wrap_content"
-	        android:tag="@string/FruitItems"
-	        android:contentDescription="@string/FruitItems"
-	        android:src="@drawable/fruit"
-	        android:onClick="orderItemInfo" />
-	    <ImageButton 
-	        android:id="@+id/ElseItems"
-	        android:background="@null"
-	        android:layout_width="0dp"
-	        android:layout_weight="1"
-	        android:layout_height="wrap_content"
-	        android:tag="@string/ElseItems"
-	        android:contentDescription="@string/ElseItems"
-	        android:src="@drawable/etc"
-	        android:onClick="orderItemInfo" />
     </LinearLayout>
     <!-- カテゴリ選択ボタン群 ここまで -->
     
+      
     <!-- 品物名表示一覧 ここから-->
-    <LinearLayout 
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-	    <HorizontalScrollView
-	        android:layout_width="match_parent"
-	        android:layout_height="0dp"
-	        android:layout_weight="1">
-	    	<ScrollView
-	        	android:layout_width="wrap_content"
-	        	android:layout_height="match_parent">
-	        	<TableLayout
-	        	    android:id="@+id/itemInfo"
-	        	    android:layout_width="match_parent"
-	        	    android:layout_height="wrap_content">        	    
-	        	</TableLayout>
-	   		</ScrollView>
-	    </HorizontalScrollView>
-	    <!-- 品物名表示一覧 ここまで-->
+	<HorizontalScrollView
+		android:layout_width="match_parent"
+	    android:layout_height="0dp"
+	    android:layout_weight="1">
+	    <ScrollView
+	     	android:layout_width="wrap_content"
+	        android:layout_height="match_parent">
+	        <TableLayout
+	        	android:id="@+id/itemInfo"
+	        	android:layout_width="match_parent"
+	        	android:layout_height="wrap_content">        	    
+	        </TableLayout>
+	   	</ScrollView>
+	</HorizontalScrollView>
+	<!-- 品物名表示一覧 ここまで-->
+	 
 	    
-	    <!-- 画面遷移ボタン ここから-->
-		<LinearLayout
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    android:gravity="bottom"
-		    android:orientation="horizontal">
-		    <Button 
-		        android:id="@+id/ToTopPage"
-		        android:layout_weight="1"
-		        android:layout_width="0dp"
-		        android:layout_height="wrap_content"	    
-		    	android:text="@string/ToTopPage"
-		    	android:onClick="returnTopPage" />
-		    <Button 
-		        android:id="@+id/ToOrderConfirm"
-		        android:layout_weight="1"
-		        android:layout_width="0dp"
-		        android:layout_height="wrap_content"	    
-		    	android:text="@string/ToOrderConfirm"
-		    	android:onClick="toConfirmPage" />
-		</LinearLayout>
+	<!-- 画面遷移ボタン ここから-->
+	<Button 
+		android:id="@+id/ToOrderConfirm"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_margin="15dip"
+		android:drawableLeft="@drawable/ic_menu_agenda"
+		android:background="@drawable/button_stateful"
+		android:text="@string/ToOrderConfirm"
+		android:textSize="18sp"
+		android:textColor="@drawable/button_text_stateful"
+		android:onClick="toConfirmPage" />
 	<!-- 画面遷移ボタン ここまで-->
-	</LinearLayout>
+	
+	<!-- フッター -->
+	<include layout="@layout/footer"/>
 </LinearLayout>

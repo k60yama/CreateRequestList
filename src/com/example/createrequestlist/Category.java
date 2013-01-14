@@ -10,17 +10,21 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -39,6 +43,12 @@ public class Category extends Activity{
 	//カテゴリの種類
 	public static final String[] CATEGORIES ={
 		"卵・乳製品・飲料","加工品","魚介","肉類","野菜","果物","その他"
+	};
+	
+	//カテゴリボタンのID
+	private static final int[] CATEGORIES_ID ={
+		R.id.EggAndDairyAndDrink, R.id.ProcessItems, R.id.FishItems, R.id.MeetItems,
+		R.id.VegetableItems, R.id.FruitItems, R.id.ElseItems
 	};
 	
 	//Buttonオブジェクトに設定するタグ用カウント
@@ -65,34 +75,52 @@ public class Category extends Activity{
 		//ActivityのOnCreateを実行
 		super.onCreate(savedInstanceState);
 		
-		//レイアウト設定ファイルの指定
-		this.setContentView(R.layout.category);
-		
+		//カスタムタイトルバーを使用
+		this.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+		this.setContentView(R.layout.category);	//レイアウト
+		final Typeface tf = Typeface.createFromAsset(this.getAssets(), "fonts/JohnHancockCP.otf");
+	    this.setHeader(tf);		//ヘッダー
+	    this.setFooter(tf);		//フッター
+	    
 		//IME自動起動無効
 		this.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		
 		//DB取得
 		this.getDB();
-		
 //******************************************2012/11/27 今田さんロジック反映対応(ImageViewに変更)ここから******************************************		
 		//画像ID取得
 		res = getResources();
 //******************************************2012/11/27 今田さんロジック反映対応(ImageViewに変更)ここまで******************************************
 	}
-
+	
+	private void setHeader(Typeface tf){
+		//タイトル用のレイアウト設定
+		this.getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.category_titlebar);
+		
+		//TextView オブジェクト取得
+		TextView title = (TextView)this.findViewById(R.id.category_title);
+		title.setTypeface(tf);
+		
+		//Button オブジェクト取得
+		Button button = (Button)this.findViewById(R.id.homeButton);
+		button.setTypeface(tf);
+	}
+	
+	private void setFooter(Typeface tf){
+		//TextView オブジェクト取得
+		TextView footer = (TextView)this.findViewById(R.id.footer);
+		footer.setTypeface(tf);		
+	}
+	
+	
 	//カテゴリのボタン押下した場合
 	public void orderItemInfo(View view){
-		//ImageButton型にキャスト
-		ImageButton categoryBtn = (ImageButton)view;
-		
-		//表示するカテゴリ名称取得
-		String categoryName = categoryBtn.getTag().toString();
-		
-		//画像初期化
-		resetImageButton();
+		//Button型にキャスト
+		Button btn = (Button)view;
+		String categoryName = btn.getText().toString();		//表示するカテゴリ名称取得
 		
 		//画像設定
-		setImageButton(categoryBtn, categoryName);
+		setImageButton(btn);
 		
 		//表示・非表示の制御(ArrayListに格納したTableRow分繰り返す)
 		String categoryTag;
@@ -108,7 +136,7 @@ public class Category extends Activity{
 			}
 		}
 	}
-	
+	/*
 	//ImageButton画像初期化
 	public void resetImageButton(){
 		//ImageView各々のインスタンスを保持
@@ -154,6 +182,19 @@ public class Category extends Activity{
 		}else if(categoryName.equals("その他")){
 			categoryBtn.setImageResource(R.drawable.push_etc);
 		}		
+	}
+	*/
+	
+	//ImageButton画像設定
+	public void setImageButton(Button categoryBtn){
+		//初期化
+		for(int id : CATEGORIES_ID){
+			Button btn = (Button)this.findViewById(id);
+			btn.setBackgroundResource(R.drawable.category_btn_normal);
+		}
+		
+		//押下されたボタンのみ変更
+		categoryBtn.setBackgroundResource(R.drawable.category_btn_pressed);
 	}
 	
 	//トップページへ押下した場合
@@ -261,8 +302,8 @@ public class Category extends Activity{
 				//TextView
 				TextView tv = new TextView(this);
 				tv.setText(cursor.getString(1));
-				tv.setWidth(230);
-				tv.setPadding(0, 0, 0, 70);
+				tv.setWidth(230);				
+				tv.setPadding(10, 0, 5, 70);
 				tv.setTextSize(18);
 				row.addView(tv);
 				

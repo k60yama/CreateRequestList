@@ -22,9 +22,7 @@ public class MainMenu extends Activity implements OnClickListener{
         
     	//カスタムタイトルバーを使用
     	this.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-    	
-    	//レイアウト設定ファイルの指定
-        this.setContentView(R.layout.main);
+        this.setContentView(R.layout.main);		//レイアウト
         final Typeface tf = Typeface.createFromAsset(this.getAssets(), "fonts/JohnHancockCP.otf");
         this.setHeader(tf);			//ヘッダー
         this.setFooter(tf);			//フッター
@@ -119,6 +117,7 @@ public class MainMenu extends Activity implements OnClickListener{
 		footer.setTypeface(tf);
 	}
 	
+	/*
 	//Backキー無効
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event){
@@ -130,5 +129,6 @@ public class MainMenu extends Activity implements OnClickListener{
 			}
 		}
 		return super.dispatchKeyEvent(event);
-	}    
+	}
+	*/ 
 }
