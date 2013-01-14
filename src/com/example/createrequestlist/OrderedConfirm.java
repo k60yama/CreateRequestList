@@ -3,14 +3,17 @@ package com.example.createrequestlist;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -22,7 +25,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Typeface;
-import android.net.Uri;
+//import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.CommonDataKinds.Email;
@@ -246,6 +249,8 @@ public class OrderedConfirm extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				emailMainHandling();
+				Intent intent = new Intent(OrderedConfirm.this,Compleat.class);
+				startActivity(intent);
 			}
 		});
 		dialog.setNegativeButton("閉じる", new DialogInterface.OnClickListener() {
@@ -260,9 +265,16 @@ public class OrderedConfirm extends Activity {
 	private void emailMainHandling(){
 		//メールアドレスを格納
 		String mailAddress = "";
+		
+		//javaMail用
+		ArrayList<String> javaMailAddress = new ArrayList<String>();
+		
 		for(int i=0; i<usersName.length; i++){
 			if(checkStatus[i]){
 				mailAddress = mailAddress + userMap.get(usersName[i]) + ",";
+				
+				//javaMail用
+				javaMailAddress.add(userMap.get(usersName[i]));
 			}
 		}
 		
@@ -271,11 +283,11 @@ public class OrderedConfirm extends Activity {
 			showMsg("宛先が選択されいてません。");
 		}else{
 			//emailAppStart(mailAddress);
-			send_Gmail(mailAddress);
+			send_Gmail(javaMailAddress);
 		}
 	}
 	
-	/*
+/*	
 	//E-MAIL起動処理
 	private void emailAppStart(String mailAddress){
 		//URI設定(宛先)
@@ -291,10 +303,21 @@ public class OrderedConfirm extends Activity {
 		//アクティビティ実行
 		startActivityForResult(intent, REQUEST_CODE);		
 	}
-	*/
+*/	
 	
 	//JavaMailで送信処理
-	private void send_Gmail(String mailAddress){
+	private void send_Gmail(ArrayList<String> javaMailAddress){
+		//送信先設定
+		Address[] address = new Address[javaMailAddress.size()];
+		
+		for(int i=0; i<javaMailAddress.size(); i++){
+			try {
+				address[i] = new InternetAddress(javaMailAddress.get(i));
+			} catch (AddressException e) {
+				Log.e("mailSendErr", "宛先作成に失敗しました。");
+			}
+		}
+		
 		//プリファレンス取得
 		SharedPreferences pref = this.getSharedPreferences(MailSetUp.FILE_NAME, MODE_PRIVATE);
 		String user = pref.getString("MAIL", "");
@@ -314,7 +337,7 @@ public class OrderedConfirm extends Activity {
 		MimeMessage mimeMsg = new MimeMessage(session);
 		try {
 			mimeMsg.setFrom(new InternetAddress(user));	//Fromアドレス設定
-			mimeMsg.setRecipient(Message.RecipientType.TO, new InternetAddress(mailAddress));	//送信先設定
+			mimeMsg.setRecipients(Message.RecipientType.TO, address);	//送信先設定
 			mimeMsg.setContent("body","text/plain; utf-8");
 			mimeMsg.setHeader("Content-Transfer-Encoding", "7bit");
 			mimeMsg.setSubject("【おねがい】必要な品物あり");	//件名
@@ -328,7 +351,6 @@ public class OrderedConfirm extends Activity {
 			Log.e("mailSendErr", "メール送信に失敗しました。");
 		}
 	}
-	
 	
 	//本文作成処理
 	private String createBodyMsg(){

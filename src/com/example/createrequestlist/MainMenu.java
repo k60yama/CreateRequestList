@@ -172,7 +172,6 @@ public class MainMenu extends Activity implements OnClickListener{
 	}
 	
 	
-	/*
 	//Backキー無効
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event){
@@ -180,10 +179,9 @@ public class MainMenu extends Activity implements OnClickListener{
 		if(event.getAction() == KeyEvent.ACTION_DOWN){
 			//Backキーが押下された場合
 			if(event.getKeyCode() == KeyEvent.KEYCODE_BACK){
-				return true;
+				this.moveTaskToBack(true);
 			}
 		}
 		return super.dispatchKeyEvent(event);
 	}
-	*/ 
 }

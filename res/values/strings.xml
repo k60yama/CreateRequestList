@@ -58,5 +58,9 @@
     <string name="setup_title">事前設定画面</string>
     <string name="setup_txt">事前に以下項目を設定して、\nこのアプリをご利用ください。</string>
     <string name="address">Gmail アドレス：</string>
-    <string name="password">パスワード：    </string>
+    <string name="password">パスワード：</string>
+    
+    <!-- メール送信完了画面 -->
+    <string name="compleat_title">送信完了画面</string>
+    <string name="compleat_message">メールを送信しました。</string>
 </resources>

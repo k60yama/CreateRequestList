@@ -49,57 +49,61 @@ public final class R {
         public static final int tomato=0x7f020023;
     }
     public static final class id {
-        public static final int BackButton=0x7f07001b;
+        public static final int BackButton=0x7f07001d;
         public static final int EggAndDairyAndDrink=0x7f070000;
         public static final int ElseItems=0x7f070006;
         public static final int FishItems=0x7f070002;
         public static final int FruitItems=0x7f070005;
-        public static final int ItemAdd=0x7f07000c;
-        public static final int ItemDelete=0x7f07000e;
-        public static final int ItemUpdate=0x7f07000d;
+        public static final int ItemAdd=0x7f07000e;
+        public static final int ItemDelete=0x7f070010;
+        public static final int ItemUpdate=0x7f07000f;
         public static final int MeetItems=0x7f070003;
         public static final int ProcessItems=0x7f070001;
         public static final int ToOrderConfirm=0x7f070008;
         public static final int VegetableItems=0x7f070004;
         public static final int category_title=0x7f07000a;
-        public static final int date=0x7f07001e;
-        public static final int editList=0x7f070015;
-        public static final int footer=0x7f070010;
-        public static final int historyInfoTitle=0x7f070020;
-        public static final int historyItem=0x7f07001f;
-        public static final int historyTitle=0x7f07001d;
+        public static final int compleat_message=0x7f07000c;
+        public static final int compleat_title=0x7f07000d;
+        public static final int date=0x7f070020;
+        public static final int editList=0x7f070017;
+        public static final int footer=0x7f070012;
+        public static final int historyInfoTitle=0x7f070022;
+        public static final int historyItem=0x7f070021;
+        public static final int historyTitle=0x7f07001f;
         public static final int homeButton=0x7f07000b;
         public static final int icon=0x7f070009;
         public static final int itemInfo=0x7f070007;
-        public static final int list_title=0x7f07000f;
-        public static final int listview=0x7f07001c;
-        public static final int mailAddress=0x7f070011;
-        public static final int mail_setup=0x7f070017;
-        public static final int menu_settings=0x7f070021;
-        public static final int order=0x7f070014;
-        public static final int orderHistory=0x7f070016;
-        public static final int orderedItem=0x7f070019;
-        public static final int ordered_confirm_title=0x7f07001a;
-        public static final int password=0x7f070012;
-        public static final int setup_title=0x7f070013;
-        public static final int title=0x7f070018;
+        public static final int list_title=0x7f070011;
+        public static final int listview=0x7f07001e;
+        public static final int mailAddress=0x7f070013;
+        public static final int mail_setup=0x7f070019;
+        public static final int menu_settings=0x7f070023;
+        public static final int order=0x7f070016;
+        public static final int orderHistory=0x7f070018;
+        public static final int orderedItem=0x7f07001b;
+        public static final int ordered_confirm_title=0x7f07001c;
+        public static final int password=0x7f070014;
+        public static final int setup_title=0x7f070015;
+        public static final int title=0x7f07001a;
     }
     public static final class layout {
         public static final int category=0x7f030000;
         public static final int category_titlebar=0x7f030001;
-        public static final int edit_list=0x7f030002;
-        public static final int edit_titlebar=0x7f030003;
-        public static final int footer=0x7f030004;
-        public static final int mail_setup=0x7f030005;
-        public static final int mail_setup_titlebar=0x7f030006;
-        public static final int main=0x7f030007;
-        public static final int main_titlebar=0x7f030008;
-        public static final int ordered_confirm=0x7f030009;
-        public static final int ordered_confirm_titlebar=0x7f03000a;
-        public static final int ordered_history=0x7f03000b;
-        public static final int ordered_history_titlebar=0x7f03000c;
-        public static final int product_history=0x7f03000d;
-        public static final int product_history_titlebar=0x7f03000e;
+        public static final int compleat=0x7f030002;
+        public static final int compleat_titlebar=0x7f030003;
+        public static final int edit_list=0x7f030004;
+        public static final int edit_titlebar=0x7f030005;
+        public static final int footer=0x7f030006;
+        public static final int mail_setup=0x7f030007;
+        public static final int mail_setup_titlebar=0x7f030008;
+        public static final int main=0x7f030009;
+        public static final int main_titlebar=0x7f03000a;
+        public static final int ordered_confirm=0x7f03000b;
+        public static final int ordered_confirm_titlebar=0x7f03000c;
+        public static final int ordered_history=0x7f03000d;
+        public static final int ordered_history_titlebar=0x7f03000e;
+        public static final int product_history=0x7f03000f;
+        public static final int product_history_titlebar=0x7f030010;
     }
     public static final class menu {
         public static final int activity_main=0x7f060000;
@@ -130,6 +134,10 @@ public final class R {
          */
         public static final int category_title=0x7f04000d;
         public static final int checkTxt=0x7f04001b;
+        public static final int compleat_message=0x7f040025;
+        /**  メール送信完了画面 
+         */
+        public static final int compleat_title=0x7f040024;
         public static final int editList_label=0x7f04000a;
         /**  フッター用 
          */
