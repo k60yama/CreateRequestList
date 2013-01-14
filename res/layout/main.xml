@@ -12,6 +12,7 @@
 	    
 	    <Button 
 	        android:id="@+id/order"
+	        android:enabled="false"
 	        android:text="@string/order_label"
 	        android:textSize="30sp"
 	        android:textColor="@drawable/button_text_stateful"
@@ -57,7 +58,7 @@
 		        android:textColor="@drawable/button_text_stateful" />
 	    </LinearLayout>
 	    
-	   <!--  <Button 
+	   	<Button 
 	        android:id="@+id/mail_setup"
 	        android:text="@string/mail_setup"
 	        android:textSize="18sp"
@@ -68,7 +69,7 @@
 	        android:layout_height="wrap_content"
 	        android:drawableLeft="@drawable/ic_menu_manage"
 	        android:layout_marginLeft="5dip"
-	        android:layout_marginRight="5dip" />--> 
+	        android:layout_marginRight="5dip" /> 
 	</LinearLayout>
     <include layout="@layout/footer"/>
 </LinearLayout>

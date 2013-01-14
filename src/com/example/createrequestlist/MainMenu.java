@@ -7,10 +7,12 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 
 public class MainMenu extends Activity implements OnClickListener{
@@ -19,7 +21,7 @@ public class MainMenu extends Activity implements OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         //ActivityのOnCreate実行
     	super.onCreate(savedInstanceState);
-        
+    	
     	//カスタムタイトルバーを使用
     	this.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         this.setContentView(R.layout.main);		//レイアウト
@@ -30,20 +32,55 @@ public class MainMenu extends Activity implements OnClickListener{
         //データベース事前設定
         this.setDataBase();
      
+        /*
         //Button オブジェクト取得
         Button[] buttons = {
         	(Button)this.findViewById(R.id.order),
         	(Button)this.findViewById(R.id.editList),
-        	(Button)this.findViewById(R.id.orderHistory)
+        	(Button)this.findViewById(R.id.orderHistory),
+        	(Button)this.findViewById(R.id.mail_setup)
         };
+        */
         
         //Button オブジェクトにクリックリスナーを設定
-        for(Button button:buttons){
+        for(Button button:getButtons()){
         	button.setOnClickListener(this);
+        	buttonStatus(button);
         }
     }
 
+	//Buttonオブジェクト取得
+	private Button[] getButtons(){
+        Button[] buttons = {
+        	(Button)this.findViewById(R.id.order),
+        	(Button)this.findViewById(R.id.editList),
+        	(Button)this.findViewById(R.id.orderHistory),
+        	(Button)this.findViewById(R.id.mail_setup)
+        };
+        return buttons;
+	}
+	
+	//Buttonオブジェクトステータス変更
+	private void buttonStatus(Button button){
+		if(button.getId() == R.id.order){
+			if(!isAccount()){
+				button.setEnabled(false);
+			}else{
+				button.setEnabled(true);
+			}
+		}
+	}
+	
     @Override
+	protected void onRestart() {
+    	//Activity再開時にも再チェック
+        for(Button button:getButtons()){
+        	buttonStatus(button);
+        }
+		super.onRestart();
+	}
+
+	@Override
     public void onClick(View view){
     	//Intent変数初期化
     	Intent nextActivity = null;
@@ -62,6 +99,9 @@ public class MainMenu extends Activity implements OnClickListener{
     			return ;	//強制終了
     		}
     		nextActivity = new Intent(this,OrderedHistory.class);
+    		break;
+    	case R.id.mail_setup:
+    		nextActivity = new Intent(this,MailSetUp.class);
     		break;
     	}
     	//アクティビティ起動
@@ -116,6 +156,21 @@ public class MainMenu extends Activity implements OnClickListener{
 		TextView footer = (TextView)this.findViewById(R.id.footer);
 		footer.setTypeface(tf);
 	}
+	
+	
+	private boolean isAccount(){
+		boolean isAccount = false;
+		//プリファレンス取得
+		SharedPreferences pref = this.getSharedPreferences(MailSetUp.FILE_NAME, MODE_PRIVATE);
+		String user = pref.getString("MAIL", "");
+		String pass = pref.getString("PASS", "");
+		
+		if(!("".equals(user.trim())) && !("".equals(pass.trim()))){
+			isAccount = true;
+		}
+		return isAccount;
+	}
+	
 	
 	/*
 	//Backキー無効
