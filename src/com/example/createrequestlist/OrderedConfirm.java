@@ -54,7 +54,7 @@ public class OrderedConfirm extends Activity {
 	private Map<String,String> userMap;
 	
 	//メールアプリ起動後のリクエストコード
-	private static final int REQUEST_CODE = 0;
+	//private static final int REQUEST_CODE = 0;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -245,15 +245,16 @@ public class OrderedConfirm extends Activity {
 					public void onClick(DialogInterface dialog, int which, boolean isChecked) {
 					}
 		});
-		dialog.setPositiveButton("次へ", new DialogInterface.OnClickListener() {			
+		dialog.setPositiveButton("送信", new DialogInterface.OnClickListener() {			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				emailMainHandling();
+				//emailMainHandling();
 				Intent intent = new Intent(OrderedConfirm.this,Compleat.class);
+				intent.putExtra("RESULT", emailMainHandling());
 				startActivity(intent);
 			}
 		});
-		dialog.setNegativeButton("閉じる", new DialogInterface.OnClickListener() {
+		dialog.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 			}
@@ -262,7 +263,10 @@ public class OrderedConfirm extends Activity {
 	}
 	
 	//E-MAIL起動メイン処理
-	private void emailMainHandling(){
+	private boolean emailMainHandling(){
+		//処理結果初期化
+		boolean result = false;
+		
 		//メールアドレスを格納
 		String mailAddress = "";
 		
@@ -283,8 +287,17 @@ public class OrderedConfirm extends Activity {
 			showMsg("宛先が選択されいてません。");
 		}else{
 			//emailAppStart(mailAddress);
-			send_Gmail(javaMailAddress);
+			if(send_Gmail(javaMailAddress)){
+				result = true;
+				
+				//日付作成
+				Date date = new Date();
+				DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+				ProductFiles pf = new ProductFiles(OrderedConfirm.this,df.format(date),inputTxt);
+				pf.fileMain();
+			}
 		}
+		return result;
 	}
 	
 /*	
@@ -306,7 +319,7 @@ public class OrderedConfirm extends Activity {
 */	
 	
 	//JavaMailで送信処理
-	private void send_Gmail(ArrayList<String> javaMailAddress){
+	private boolean send_Gmail(ArrayList<String> javaMailAddress){
 		//送信先設定
 		Address[] address = new Address[javaMailAddress.size()];
 		
@@ -349,7 +362,9 @@ public class OrderedConfirm extends Activity {
 			transport.close();
 		} catch (Exception e) {
 			Log.e("mailSendErr", "メール送信に失敗しました。");
+			return false;
 		}
+		return true;
 	}
 	
 	//本文作成処理
@@ -372,6 +387,7 @@ public class OrderedConfirm extends Activity {
 		inputTxt = inputTxt + "'" + itemName + "','" + itemNum + "'\n";
 	}
 	
+	/*
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data){
 		if(requestCode == REQUEST_CODE){
@@ -386,4 +402,5 @@ public class OrderedConfirm extends Activity {
 			startActivity(intent);
 		}
 	}
+	*/
 }

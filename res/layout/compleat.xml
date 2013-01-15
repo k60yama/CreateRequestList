@@ -13,10 +13,8 @@
         android:layout_margin="10dip"
         android:padding="10dip"
         android:background="@drawable/text_bg"
-        android:drawableLeft="@drawable/ic_menu_send"
-        android:text="@string/compleat_message"
         android:textSize="22sp"
-        android:gravity="center" />
+        android:gravity="center_vertical" />
     
     <Button
         android:background="@drawable/button_stateful" 

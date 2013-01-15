@@ -22,9 +22,7 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -74,6 +72,9 @@ public class Category extends Activity{
 	public void onCreate(Bundle savedInstanceState){
 		//ActivityのOnCreateを実行
 		super.onCreate(savedInstanceState);
+
+		//IME自動起動無効
+		this.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		
 		//カスタムタイトルバーを使用
 		this.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
@@ -81,9 +82,6 @@ public class Category extends Activity{
 		final Typeface tf = Typeface.createFromAsset(this.getAssets(), "fonts/JohnHancockCP.otf");
 	    this.setHeader(tf);		//ヘッダー
 	    this.setFooter(tf);		//フッター
-	    
-		//IME自動起動無効
-		this.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		
 		//DB取得
 		this.getDB();
@@ -322,6 +320,7 @@ public class Category extends Activity{
 				ed.setInputType(InputType.TYPE_CLASS_NUMBER);
 				ed.setText("0");
 				ed.setWidth(80);
+				ed.setFocusable(false);
 				row.addView(ed);
 				
 				//EditTextをArrayListに格納
@@ -569,8 +568,6 @@ public class Category extends Activity{
 					}
 					editNum.setText(String.valueOf(num));
 				}
-				
-				//Toast.makeText(Category.this, String.valueOf(count2), Toast.LENGTH_SHORT).show();
 			}
 		});
 		

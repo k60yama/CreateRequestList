@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -50,10 +49,6 @@ public class MailSetUp extends Activity {
 		//TextView オブジェクト取得
 		TextView title = (TextView)this.findViewById(R.id.setup_title);
 		title.setTypeface(tf);
-		
-		//Button オブジェクト取得
-		Button button = (Button)this.findViewById(R.id.homeButton);
-		button.setTypeface(tf);
 	}
 	
 	private void setFooter(Typeface tf){
@@ -62,8 +57,9 @@ public class MailSetUp extends Activity {
 		footer.setTypeface(tf);		
 	}
 	
+
 	//トップページへ押下した場合
-	public void returnTopPage(View view){
+	public void mailSetUp(View view){
 		//プリファレンス編集モード
 		SharedPreferences.Editor editor = pref.edit();
 		editor.putString("MAIL", mailEd.getText().toString());
@@ -71,18 +67,14 @@ public class MailSetUp extends Activity {
 		editor.commit();
 		this.finish();		//アクティビティ終了
 	}
-
+	
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event){
 		//デバイスボタンが押下された場合
 		if(event.getAction() == KeyEvent.ACTION_DOWN){
 			//Backキーが押下された場合
 			if(event.getKeyCode() == KeyEvent.KEYCODE_BACK){
-				//プリファレンス編集モード
-				SharedPreferences.Editor editor = pref.edit();
-				editor.putString("MAIL", mailEd.getText().toString());
-				editor.putString("PASS", passEd.getText().toString());
-				editor.commit();
+				return true;
 			}
 		}
 		return super.dispatchKeyEvent(event);

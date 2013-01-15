@@ -7,7 +7,6 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -62,7 +61,7 @@ public class MainMenu extends Activity implements OnClickListener{
 	
 	//Buttonオブジェクトステータス変更
 	private void buttonStatus(Button button){
-		if(button.getId() == R.id.order){
+		if(button.getId() != R.id.mail_setup){
 			if(!isAccount()){
 				button.setEnabled(false);
 			}else{
