@@ -16,6 +16,8 @@ import android.graphics.Typeface;
 
 public class MainMenu extends Activity implements OnClickListener{
 
+	private static boolean mailChk;
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         //ActivityのOnCreate実行
@@ -41,10 +43,15 @@ public class MainMenu extends Activity implements OnClickListener{
         };
         */
         
+        
         //Button オブジェクトにクリックリスナーを設定
         for(Button button:getButtons()){
         	button.setOnClickListener(this);
         	buttonStatus(button);
+        }
+        
+        if(!(mailChk)){
+        	showMsg();
         }
     }
 
@@ -63,8 +70,10 @@ public class MainMenu extends Activity implements OnClickListener{
 	private void buttonStatus(Button button){
 		if(button.getId() != R.id.mail_setup){
 			if(!isAccount()){
+				mailChk = false;
 				button.setEnabled(false);
 			}else{
+				mailChk = true;
 				button.setEnabled(true);
 			}
 		}
@@ -76,9 +85,27 @@ public class MainMenu extends Activity implements OnClickListener{
         for(Button button:getButtons()){
         	buttonStatus(button);
         }
+        
+        if(!(mailChk)){
+        	showMsg();
+        }
 		super.onRestart();
 	}
 
+	//ダイアログ表示
+	private void showMsg(){
+		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+		dialog.setIcon(android.R.drawable.ic_menu_info_details);
+		dialog.setTitle("メッセージ");
+		dialog.setMessage("[Gmailアカウント設定] からあなたのGmailアカウントを設定してアプリをご利用してください。");
+		dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+			}
+		});
+		dialog.show();
+	}
+    
 	@Override
     public void onClick(View view){
     	//Intent変数初期化
