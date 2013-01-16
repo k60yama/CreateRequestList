@@ -19,7 +19,8 @@ public class ProductDBHelper extends SQLiteOpenHelper {
 	private static final String DB_NAME_ASSET = "product.sqlite3";	//事前に作成したデータベースファイル
 	private final Context context;									//呼び出し元のアクティビティ保持用
 	private SQLiteDatabase mdb;
-
+	private SQLiteDatabase rdb;
+	
 	public ProductDBHelper(Context con){
 		//データベースを開く
 		super(con, DB_NAME,null,1);
@@ -38,12 +39,16 @@ public class ProductDBHelper extends SQLiteOpenHelper {
 			//既にデータベースファイルが作成されているため何もしない
 		}else{
 			//アプリのデフォルトシステムパスにデータベースファイルが作成される
-			this.getReadableDatabase();
+			rdb = this.getReadableDatabase();
 			try{
 				//データベースコピー処理へ
 				this.copyDataBaseFromAsset();
 			}catch(IOException e){
 				Log.e("copyDataBaseFromAsset","データベースコピー処理が失敗しました");
+			}finally{
+				if(rdb != null){
+					rdb.close();
+				}
 			}
 		}
 	}

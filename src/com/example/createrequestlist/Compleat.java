@@ -22,17 +22,14 @@ public class Compleat extends Activity {
 	    this.setHeader(tf);		//ヘッダー
 	    this.setFooter(tf);		//フッター
 
-	    //TextView取得
+	    //メール送信結果に応じて表示するテキストを設定する
+	    Bundle data = this.getIntent().getExtras();
 	    TextView tv = (TextView)this.findViewById(R.id.compleat_message);
-	    
-	    //インテント取得
-	    Intent intent = this.getIntent();
-	    Bundle date = intent.getExtras();
-	    
-	    if(date.getBoolean("RESULT")){
+	    int resultCode = data.getInt("RESULT");
+	    if(resultCode == 0){
 	    	tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_menu_send, 0, 0, 0);
 	    	tv.setText("メールを送信しました。");
-	    }else{
+	    }else if(resultCode == 1){
 	    	tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_menu_close_clear_cancel, 0, 0, 0);
 	    	tv.setText("メールが送信できませんでした。");
 	    }

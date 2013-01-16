@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -41,6 +43,15 @@ public class OrderedHistory extends Activity implements OnItemClickListener{
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1);
 		ListView listview = (ListView)this.findViewById(R.id.listview);
 		getFiles();
+		
+		//降順にソート
+		Collections.sort(dateList, new Comparator<String>(){
+			@Override
+			public int compare(String lhs, String rhs) {
+				return rhs.compareTo(lhs);
+			}
+		});
+		
 		for(int i=0; i<dateList.size(); i++){
 			adapter.add(dateList.get(i));		//日付追加	
 		}

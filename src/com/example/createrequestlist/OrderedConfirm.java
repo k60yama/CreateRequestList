@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -52,9 +51,6 @@ public class OrderedConfirm extends Activity {
 	private boolean[] checkStatus;
 	private String[] usersName;
 	private Map<String,String> userMap;
-	
-	//メールアプリ起動後のリクエストコード
-	//private static final int REQUEST_CODE = 0;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -212,8 +208,8 @@ public class OrderedConfirm extends Activity {
 		
 		//ユーザー情報設定(ダイアログ表示用)
 		String userInfo = name + "\n" + "(" + emailType + ")";
-		usersName[userIndex] = userInfo;		
-		checkStatus[userIndex] = false;
+		usersName[userIndex] = userInfo;	//ダイアログに表示するテキスト
+		checkStatus[userIndex] = false;		//CheckBox は全て未選択
 		
 		//userMapに登録<ユーザー情報,メールアドレス>
 		userMap.put(userInfo, email);
@@ -248,10 +244,8 @@ public class OrderedConfirm extends Activity {
 		dialog.setPositiveButton("送信", new DialogInterface.OnClickListener() {			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				//emailMainHandling();
-				Intent intent = new Intent(OrderedConfirm.this,Compleat.class);
-				intent.putExtra("RESULT", emailMainHandling());
-				startActivity(intent);
+				//メール送信処理確認へ
+				isSendMailCheck(gmailMainHandling());
 			}
 		});
 		dialog.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
@@ -262,74 +256,69 @@ public class OrderedConfirm extends Activity {
 		dialog.show();		//ダイアログ表示
 	}
 	
-	//E-MAIL起動メイン処理
-	private boolean emailMainHandling(){
-		//処理結果初期化
-		boolean result = false;
+	//メール送信処理確認
+	private void isSendMailCheck(int resultCode){
+		//メール送信成功と失敗時のみ次のアクティビティに遷移する
+		if((resultCode == 0) || (resultCode == 1)){
+			Intent intent = new Intent(this,Compleat.class);
+			intent.putExtra("RESULT", resultCode);
+			startActivity(intent);
+		//送信先が未選択の場合
+		}else if(resultCode == 2){
+			showMsg("送信先が選択されいてません。");
+		//送信先作成失敗の場合
+		}else if(resultCode == 3){
+			showMsg("送信処理で異常が発生しました。");
+		}
+	}
+	
+	/*E-MAIL起動メイン処理
+	戻り値：0 (送信OK)
+	戻り値：1 (送信NG)
+	戻り値：2 (宛先ダイアログ未選択)
+	戻り値：3 (送信先作成失敗) */
+	private int gmailMainHandling(){
+		//初期化
+		int resultCode = 0;			//戻り値
+		int sendToCount = 0;		//送信件数
+		ArrayList<InternetAddress> sendToAddressList = new ArrayList<InternetAddress>();
 		
-		//メールアドレスを格納
-		String mailAddress = "";
-		
-		//javaMail用
-		ArrayList<String> javaMailAddress = new ArrayList<String>();
-		
+		//ユーザー数分繰り返す
 		for(int i=0; i<usersName.length; i++){
 			if(checkStatus[i]){
-				mailAddress = mailAddress + userMap.get(usersName[i]) + ",";
-				
-				//javaMail用
-				javaMailAddress.add(userMap.get(usersName[i]));
+				try{
+					//ユーザー名をキーにメールアドレスを取得する
+					sendToAddressList.add(new InternetAddress(userMap.get(usersName[i])));
+				}catch(AddressException e){
+					Log.e("emailMainHandlingErr", "送信先作成に失敗しました。");
+					resultCode = 3;
+				}
+				sendToCount = sendToCount + 1;		//送信件数カウント
 			}
 		}
 		
-		//選択チェック確認
-		if("".equals(mailAddress)){
-			showMsg("宛先が選択されいてません。");
+		//送信件数チェック
+		if(sendToCount == 0){
+			//showMsg("宛先が選択されいてません。");
+			resultCode = 2;
+		}else if(!(sendGmail(sendToAddressList))){
+			resultCode = 1;
 		}else{
-			//emailAppStart(mailAddress);
-			if(send_Gmail(javaMailAddress)){
-				result = true;
-				
-				//日付作成
-				Date date = new Date();
-				DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
-				ProductFiles pf = new ProductFiles(OrderedConfirm.this,df.format(date),inputTxt);
-				pf.fileMain();
-			}
+			//送信履歴作成
+			Date date = new Date();
+			DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+			
+			//ProductFilesインスタンス生成
+			ProductFiles pf = new ProductFiles(OrderedConfirm.this,df.format(date),inputTxt);
+			pf.fileMain();
 		}
-		return result;
+		return resultCode;
 	}
-	
-/*	
-	//E-MAIL起動処理
-	private void emailAppStart(String mailAddress){
-		//URI設定(宛先)
-		Uri uri = Uri.parse("mailto:" + mailAddress);
-
-		//インテント生成
-		Intent intent = new Intent("android.intent.action.SENDTO",uri);
-
-		//付属情報設定
-		intent.putExtra(Intent.EXTRA_SUBJECT, "【おねがい】必要な品物あり");	//件名
-		intent.putExtra(Intent.EXTRA_TEXT, createBodyMsg());			//本文
-
-		//アクティビティ実行
-		startActivityForResult(intent, REQUEST_CODE);		
-	}
-*/	
 	
 	//JavaMailで送信処理
-	private boolean send_Gmail(ArrayList<String> javaMailAddress){
-		//送信先設定
-		Address[] address = new Address[javaMailAddress.size()];
-		
-		for(int i=0; i<javaMailAddress.size(); i++){
-			try {
-				address[i] = new InternetAddress(javaMailAddress.get(i));
-			} catch (AddressException e) {
-				Log.e("mailSendErr", "宛先作成に失敗しました。");
-			}
-		}
+	private boolean sendGmail(ArrayList<InternetAddress> sendToAddressList){
+		//仮引数 sendToAddressList を InternetAddress 型配列に変換
+		InternetAddress[] sendToAddress = sendToAddressList.toArray(new InternetAddress[sendToAddressList.size()]);
 		
 		//プリファレンス取得
 		SharedPreferences pref = this.getSharedPreferences(MailSetUp.FILE_NAME, MODE_PRIVATE);
@@ -350,7 +339,7 @@ public class OrderedConfirm extends Activity {
 		MimeMessage mimeMsg = new MimeMessage(session);
 		try {
 			mimeMsg.setFrom(new InternetAddress(user));	//Fromアドレス設定
-			mimeMsg.setRecipients(Message.RecipientType.TO, address);	//送信先設定
+			mimeMsg.setRecipients(Message.RecipientType.TO, sendToAddress);	//送信先設定
 			mimeMsg.setContent("body","text/plain; utf-8");
 			mimeMsg.setHeader("Content-Transfer-Encoding", "7bit");
 			mimeMsg.setSubject("【おねがい】必要な品物あり");	//件名
@@ -361,7 +350,7 @@ public class OrderedConfirm extends Activity {
 			transport.sendMessage(mimeMsg, mimeMsg.getAllRecipients());	//メール送信
 			transport.close();
 		} catch (Exception e) {
-			Log.e("mailSendErr", "メール送信に失敗しました。");
+			Log.e("sendGmailErr", "メール送信に失敗しました。");
 			return false;
 		}
 		return true;
@@ -386,21 +375,4 @@ public class OrderedConfirm extends Activity {
 		//ファイル用文言
 		inputTxt = inputTxt + "'" + itemName + "','" + itemNum + "'\n";
 	}
-	
-	/*
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data){
-		if(requestCode == REQUEST_CODE){
-			//日付作成
-			Date date = new Date();
-			DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
-			ProductFiles pf = new ProductFiles(this,df.format(date),inputTxt);
-			pf.fileMain();
-			
-			//トップページへ
-			Intent intent = new Intent(this,MainMenu.class);
-			startActivity(intent);
-		}
-	}
-	*/
 }
