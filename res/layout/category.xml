@@ -22,7 +22,7 @@
 	        android:layout_marginRight="5dip"
 	        android:padding="5dip"
 	        android:background="@drawable/category_btn_pressed"
-	        android:drawableLeft="@drawable/milk"
+	        android:drawableLeft="@drawable/mytea"
 	        android:onClick="orderItemInfo" />
 	    <Button 
 	        android:id="@+id/ProcessItems"
@@ -34,7 +34,7 @@
 	        android:layout_marginRight="5dip"	        
 	        android:padding="5dip"
 	        android:background="@drawable/category_btn_normal"
-	        android:drawableLeft="@drawable/progress"	        
+	        android:drawableLeft="@drawable/myprocess"	        
 	        android:onClick="orderItemInfo" />
 	    <Button 
 	        android:id="@+id/FishItems"
@@ -46,7 +46,7 @@
 	        android:layout_marginRight="5dip"	        
 	        android:padding="5dip"
 	        android:background="@drawable/category_btn_normal"
-	        android:drawableLeft="@drawable/fish"	        
+	        android:drawableLeft="@drawable/myfish"	        
 	        android:onClick="orderItemInfo" />
     </LinearLayout>
     <LinearLayout
@@ -65,7 +65,7 @@
 	        android:text="@string/MeetItems"
 	        android:textColor="@drawable/button_text_stateful"	        
 	        android:background="@drawable/category_btn_normal"
-	        android:drawableLeft="@drawable/meat"	        
+	        android:drawableLeft="@drawable/mymeat"	        
 	        android:onClick="orderItemInfo" />
 	    <Button 
 	        android:id="@+id/VegetableItems"
@@ -77,7 +77,7 @@
 	        android:text="@string/VegetableItems"
 	        android:textColor="@drawable/button_text_stateful"	        
 	        android:background="@drawable/category_btn_normal"
-	        android:drawableLeft="@drawable/tomato"	        
+	        android:drawableLeft="@drawable/myvegetable"	        
 	        android:onClick="orderItemInfo" />
 	    <Button 
 	    	android:id="@+id/FruitItems"
@@ -89,7 +89,7 @@
 	        android:text="@string/FruitItems"
 	        android:textColor="@drawable/button_text_stateful"	        
 	        android:background="@drawable/category_btn_normal"
-	        android:drawableLeft="@drawable/strawberry"	        
+	        android:drawableLeft="@drawable/myorange"	        
 	        android:onClick="orderItemInfo" />
 	    <Button 
 			android:id="@+id/ElseItems"
@@ -101,7 +101,7 @@
 			android:text="@string/ElseItems"
 	        android:textColor="@drawable/button_text_stateful"	        
 	        android:background="@drawable/category_btn_normal"
-	        android:drawableLeft="@drawable/source"			
+	        android:drawableLeft="@drawable/myelse"			
 			android:onClick="orderItemInfo" />
     </LinearLayout>
     <!-- カテゴリ選択ボタン群 ここまで -->
