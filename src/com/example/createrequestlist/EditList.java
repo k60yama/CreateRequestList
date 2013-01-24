@@ -190,7 +190,7 @@ public class EditList extends Activity{
 		}else if("12".equals(modeFlag)){
 			selectCategory();	//種別選択へ
 		}
-	}	
+	}
 //＊＊＊＊＊＊＊＊＊＊＊＊＊＊変更処理メソッド　ここまで＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
 	
 //＊＊＊＊＊＊＊＊＊＊＊＊＊＊共通処理メソッド　ここから＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊

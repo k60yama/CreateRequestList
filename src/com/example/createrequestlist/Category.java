@@ -82,13 +82,12 @@ public class Category extends Activity{
 		final Typeface tf = Typeface.createFromAsset(this.getAssets(), "fonts/JohnHancockCP.otf");
 	    this.setHeader(tf);		//ヘッダー
 	    this.setFooter(tf);		//フッター
-		
-		//DB取得
-		this.getDB();
-//******************************************2012/11/27 今田さんロジック反映対応(ImageViewに変更)ここから******************************************		
+
 		//画像ID取得
 		res = getResources();
-//******************************************2012/11/27 今田さんロジック反映対応(ImageViewに変更)ここまで******************************************
+	    
+		//DB取得
+		this.getDB();
 	}
 	
 	private void setHeader(Typeface tf){
@@ -282,6 +281,11 @@ public class Category extends Activity{
 		//TableLayout取得
 		TableLayout tLayout = (TableLayout)this.findViewById(R.id.itemInfo);
 		
+		//各View サイズを指定
+		int itemTxtWidth = res.getDimensionPixelSize(R.dimen.itemNameTxt_width);
+		int itemTxtSize = res.getDimensionPixelSize(R.dimen.itemNameTxt_size);
+		int itemNumWidth = res.getDimensionPixelSize(R.dimen.itemNum_width);
+		
 		//レコード数チェック
 		//0件の場合:TextView生成
 		//1件以上の場合:TableLayout生成
@@ -300,9 +304,9 @@ public class Category extends Activity{
 				//TextView
 				TextView tv = new TextView(this);
 				tv.setText(cursor.getString(1));
-				tv.setWidth(230);				
+				tv.setWidth(itemTxtWidth);				
 				tv.setPadding(10, 0, 5, 70);
-				tv.setTextSize(18);
+				tv.setTextSize(itemTxtSize);
 				row.addView(tv);
 				
 //******************************************2012/11/27 今田さんロジック反映対応(旧Logicコメントアウト)ここから******************************************				
@@ -319,7 +323,7 @@ public class Category extends Activity{
 				EditText ed = new EditText(this);
 				ed.setInputType(InputType.TYPE_CLASS_NUMBER);
 				ed.setText("0");
-				ed.setWidth(80);
+				ed.setWidth(itemNumWidth);
 				ed.setFocusable(false);
 				row.addView(ed);
 				
