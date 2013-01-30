@@ -18,12 +18,14 @@ import javax.mail.internet.MimeMessage;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 //import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract.Contacts;
@@ -51,6 +53,8 @@ public class OrderedConfirm extends Activity {
 	private boolean[] checkStatus;
 	private String[] usersName;
 	private Map<String,String> userMap;
+	
+	private ProgressDialog mProgressDialog;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -217,7 +221,7 @@ public class OrderedConfirm extends Activity {
 
 	//ダイアログ表示
 	private void showMsg(String msg){
-		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+		AlertDialog.Builder dialog = new AlertDialog.Builder(OrderedConfirm.this);
 		dialog.setIcon(android.R.drawable.ic_menu_info_details);
 		dialog.setTitle("メッセージ");
 		dialog.setMessage(msg);
@@ -245,7 +249,11 @@ public class OrderedConfirm extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				//メール送信処理確認へ
-				isSendMailCheck(gmailMainHandling());
+				//isSendMailCheck(gmailMainHandling());
+				
+				//SendMailTaskインスタンス生成
+				SendMailTask mTask = new SendMailTask();
+				mTask.execute();
 			}
 		});
 		dialog.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
@@ -257,20 +265,25 @@ public class OrderedConfirm extends Activity {
 	}
 	
 	//メール送信処理確認
+	/*
 	private void isSendMailCheck(int resultCode){
 		//メール送信成功と失敗時のみ次のアクティビティに遷移する
 		if((resultCode == 0) || (resultCode == 1)){
+			//mProgressDialog.dismiss();
 			Intent intent = new Intent(this,Compleat.class);
 			intent.putExtra("RESULT", resultCode);
 			startActivity(intent);
 		//送信先が未選択の場合
 		}else if(resultCode == 2){
+			//mProgressDialog.dismiss();
 			showMsg("送信先が選択されいてません。");
 		//送信先作成失敗の場合
 		}else if(resultCode == 3){
+			//mProgressDialog.dismiss();
 			showMsg("送信処理で異常が発生しました。");
 		}
 	}
+	*/
 	
 	/*E-MAIL起動メイン処理
 	戻り値：0 (送信OK)
@@ -374,5 +387,47 @@ public class OrderedConfirm extends Activity {
 		
 		//ファイル用文言
 		inputTxt = inputTxt + "'" + itemName + "','" + itemNum + "'\n";
+	}
+	
+//＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+//	内部クラス：sendMailTask	
+//＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+	private class SendMailTask extends AsyncTask<Void, Void, Integer>{
+		
+		@Override
+		//タスクが呼び出された場合
+		protected void onPreExecute() {
+			//プログレスダイアログを表示する
+			mProgressDialog = new ProgressDialog(OrderedConfirm.this);
+			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			mProgressDialog.setTitle("メール送信");
+			mProgressDialog.setMessage("メール送信中・・・");
+			mProgressDialog.show();
+		}
+		
+		@Override
+		protected Integer doInBackground(Void... params) {
+			//バックグラウンドでメール送信処理
+			return gmailMainHandling();
+		}
+		
+		@Override
+		protected void onPostExecute(Integer resultCode){
+			//プログレスダイアログを閉じる
+			mProgressDialog.dismiss();
+			
+			//メール送信処理チェック
+			if((resultCode == 0) || (resultCode == 1)){
+				Intent intent = new Intent(OrderedConfirm.this,Compleat.class);
+				intent.putExtra("RESULT", resultCode);
+				startActivity(intent);
+			//送信先が未選択の場合
+			}else if(resultCode == 2){
+				showMsg("送信先が選択されいてません。");
+			//送信先作成失敗の場合
+			}else if(resultCode == 3){
+				showMsg("送信処理で異常が発生しました。");
+			}
+		}
 	}
 }
