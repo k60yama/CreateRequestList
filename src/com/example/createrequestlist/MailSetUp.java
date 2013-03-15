@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -66,17 +65,5 @@ public class MailSetUp extends Activity {
 		editor.putString("PASS", passEd.getText().toString());
 		editor.commit();
 		this.finish();		//アクティビティ終了
-	}
-	
-	@Override
-	public boolean dispatchKeyEvent(KeyEvent event){
-		//デバイスボタンが押下された場合
-		if(event.getAction() == KeyEvent.ACTION_DOWN){
-			//Backキーが押下された場合
-			if(event.getKeyCode() == KeyEvent.KEYCODE_BACK){
-				return true;
-			}
-		}
-		return super.dispatchKeyEvent(event);
 	}
 }

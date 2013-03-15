@@ -14,7 +14,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -579,17 +578,4 @@ public class Category extends Activity{
 		return mImvw;
 	}	
 //******************************************2012/11/27 今田さんロジック反映対応(ImageViewに変更)ここまで******************************************
-	
-	//Backキー無効
-	@Override
-	public boolean dispatchKeyEvent(KeyEvent event){
-		//デバイスボタンが押下された場合
-		if(event.getAction() == KeyEvent.ACTION_DOWN){
-			//Backキーが押下された場合
-			if(event.getKeyCode() == KeyEvent.KEYCODE_BACK){
-				return true;
-			}
-		}
-		return super.dispatchKeyEvent(event);
-	}
 }
